@@ -1,5 +1,9 @@
 <template>
-  <router-link to="/">主页</router-link>
+  <router-link to="/">home</router-link>
+  <router-link to="/statistic">statistic</router-link>
+  <router-link to="/settings">settings</router-link>
+  <router-link to="/tags">tags</router-link>
+
   <router-view />
 </template>
 
