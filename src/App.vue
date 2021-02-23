@@ -1,9 +1,4 @@
 <template>
-  <router-link to="/">home</router-link>
-  <router-link to="/statistic">statistic</router-link>
-  <router-link to="/settings">settings</router-link>
-  <router-link to="/tags">tags</router-link>
-
   <router-view />
 </template>
 
@@ -20,6 +15,7 @@ export default defineComponent({ name: 'App' });
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+  height: 100vh;
+  width: 100vw;
 }
 </style>
