@@ -1,6 +1,6 @@
 <template>
   <header class="tabbar">
-    <van-tabbar v-model="active">
+    <van-tabbar active-color="#000" v-model="active">
       <van-tabbar-item
         v-for="tabItem in tabList"
         :icon="tabItem.icon"
@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from 'vue';
+import { defineComponent, reactive, ref } from 'vue';
 
 export default defineComponent({
   name: 'Layout',
@@ -35,9 +35,18 @@ export default defineComponent({
       },
       { icon: 'setting-o', field: 'setting' },
     ]);
-    return { tabList };
+    const active = ref(0);
+    return { tabList, active };
   },
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.tabbar {
+  ::v-deep .van-tabbar-item--active {
+    .van-icon {
+      font-weight: bold;
+    }
+  }
+}
+</style>
