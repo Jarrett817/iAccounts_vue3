@@ -1,29 +1,29 @@
 /**
- * 获取柱形图(默认横向)option
+ * 获取折线图option
  * @param {Object} list 图表生成参数
  * {
  *  //对应图例进行分组
  *  legendData:{
- *    "ANDROID":androidCount,
- *    "IOS":iosCount
+ *    "ANDROID":androidSaturation,
+ *    "IOS":iosSaturation
  *  },
- *  valueAxisData: "量级（柱状图）",
+ *  valueAxisData: "饱和度（折线图）",
  *  data:[
  *    {
  *      categoryData:'',
- *      iosCount:''
- *      androidCount:''
+ *      iosSaturation:''
+ *      androidSaturation:''
  *    }
  *  ]
  * }
  */
 import { merge } from "lodash";
 import { ChartFactory } from "./chart-factory";
-class BarFactory extends ChartFactory {
+class LineFactory extends ChartFactory {
   constructor() {
     super();
   }
-  getChartOption(list, stack = "", isTransverse = true) {
+  getChartOption(list) {
     const model = {
       legendData: [],
       categoryAxisData: [],
@@ -37,76 +37,77 @@ class BarFactory extends ChartFactory {
       });
       model.seriesData.push({
         name: legend,
-        type: "bar",
-        barMaxWidth: 25,
-        barMinWidth: 20,
-        stack,
-        data: dataArray,
-        barGap: "100%",
-        barCategoryGap: "40%"
+        type: "line",
+        data: dataArray
       });
     });
     if (Object.keys(model.legendData).length > 1)
       model.categoryAxisData = model.categoryAxisData.slice(0, model.categoryAxisData.length / 2);
     const { legendData, seriesData, categoryAxisData } = model;
-    const valueAxisStyle = {
-      min: 0,
-      axisLabel: {
-        formatter: "{value}"
-      },
-      axisLine: {
-        show: false
-      },
-      splitLine: {
-        show: true,
-        lineStyle: {
-          type: "dashed"
-        }
-      }
-    };
-    return merge({}, this.barStyle, {
+    return merge({}, this.lineStyle, {
       legend: {
         data: legendData.length > 1 ? legendData : []
       },
-      [isTransverse ? "xAxis" : "yAxis"]: [
+      yAxis: [
         {
-          type: "value",
-          name: list.valueAxisData || "",
-          ...valueAxisStyle
+          name: list.valueAxisData || ""
         }
       ],
-      [isTransverse ? "yAxis" : "xAxis"]: {
+      xAxis: {
         type: "category",
         data: categoryAxisData,
         axisLabel: {
-          rotate: isTransverse ? "" : categoryAxisData.length >= 10 ? 45 : 0,
+          rotate: categoryAxisData.length >= 10 ? 45 : 0,
           formatter: "{value}"
         }
       },
       series: seriesData
     });
   }
-  barStyle = {
-    legend: {
-      icon: "rect",
-      bottom: 0,
-      itemHeight: 10,
-      itemWidth: 10
-    },
+  lineStyle = {
     tooltip: {
       trigger: "axis",
       axisPointer: {
-        type: "shadow"
+        type: "cross",
+        crossStyle: {
+          color: "#999"
+        }
       }
+    },
+    legend: {
+      icon: "rect",
+      bottom: 16,
+      itemHeight: 10,
+      itemWidth: 10
     },
     grid: {
       left: "3%",
       right: "3%",
-      bottom: "40",
-      top: "3%",
+      bottom: "12%",
+      top: "12%",
       containLabel: true
-    }
+    },
+    yAxis: [
+      {
+        type: "value",
+        min: 0,
+        axisLabel: {
+          formatter: value => {
+            return (value * 100).toFixed(2) + "%";
+          }
+        },
+        axisLine: {
+          show: false
+        },
+        splitLine: {
+          show: true,
+          lineStyle: {
+            type: "dashed"
+          }
+        }
+      }
+    ]
   };
 }
 
-export { BarFactory };
+export { LineFactory };

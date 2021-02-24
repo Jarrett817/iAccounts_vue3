@@ -13,8 +13,12 @@
  ]
  */
 import { merge } from "lodash";
-class HeatMap {
-  getHeatMapOpt(data) {
+import { ChartFactory } from "./chart-factory";
+class HeatMapFactory extends ChartFactory {
+  constructor() {
+    super();
+  }
+  getChartOption(data) {
     const model = {
       xData: [],
       yData: [],
@@ -35,7 +39,10 @@ class HeatMap {
     const { xData, yData, mapData, maxData, minData } = model;
     return merge({}, this.heatMapStyle, {
       xAxis: {
-        data: xData
+        data: xData,
+        axisLabel: {
+          rotate: xData.length >= 10 ? 45 : 0
+        }
       },
       yAxis: {
         data: yData
@@ -51,6 +58,7 @@ class HeatMap {
       ]
     });
   }
+
   heatMapStyle = {
     tooltip: {},
     grid: {
@@ -65,7 +73,6 @@ class HeatMap {
         show: true
       },
       axisLabel: {
-        rotate: 45,
         color: "#B8C8EE",
         interval: 0
       },
@@ -122,4 +129,4 @@ class HeatMap {
   };
 }
 
-export { HeatMap };
+export { HeatMapFactory };

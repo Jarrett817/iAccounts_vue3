@@ -14,12 +14,16 @@
  * @param {Number} sum 总量，可选
  */
 import { merge } from "lodash";
-class PictorialBar {
-  getPictorialBarOpt(list, sum) {
+import { ChartFactory } from "./chart-factory";
+class PictorialBarFactory extends ChartFactory {
+  constructor() {
+    super();
+  }
+  getChartOption(list, sum) {
     const model = {
       richList: {},
       maxValue: 0,
-      lengendData: [],
+      legendData: [],
       upperDataList: [],
       lowerDataList: []
     };
@@ -29,7 +33,7 @@ class PictorialBar {
         color: item.color,
         fontSize: 18
       };
-      model.lengendData.push(item.seriesName);
+      model.legendData.push(item.seriesName);
       model.upperDataList.push({
         value: item.value,
         symbol: item.symbol,
@@ -43,7 +47,7 @@ class PictorialBar {
       });
     });
     if (sum) model.maxValue = sum;
-    const { richList, maxValue, lengendData, upperDataList, lowerDataList } = model;
+    const { richList, maxValue, legendData, upperDataList, lowerDataList } = model;
     return merge({}, this.pictorialBarStyle, {
       tooltip: {
         formatter: params => {
@@ -55,7 +59,7 @@ class PictorialBar {
         }
       },
       yAxis: {
-        data: lengendData
+        data: legendData
       },
       xAxis: {
         max: maxValue
@@ -132,4 +136,4 @@ class PictorialBar {
   };
 }
 
-export { PictorialBar };
+export { PictorialBarFactory };

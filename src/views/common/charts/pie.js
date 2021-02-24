@@ -1,5 +1,5 @@
 /**
- * 支持lengend颜色与图块颜色对应的饼图
+ * 支持legend颜色与图块颜色对应的饼图
  * @param {list}
  * [{
  *    name:'',
@@ -10,8 +10,12 @@
  */
 import { digitUnitFormat } from "@/common/utils/number";
 import { merge } from "lodash";
-class Pie {
-  getPieOpt(list) {
+import { ChartFactory } from "./chart-factory";
+class PieFactory extends ChartFactory {
+  constructor() {
+    super();
+  }
+  getChartOption(list, isAnnular = true) {
     const model = {
       nameData: [],
       valueData: [],
@@ -68,7 +72,7 @@ class Pie {
       series: [
         {
           type: "pie",
-          radius: ["28%", "44%"],
+          radius: isAnnular ? ["28%", "44%"] : "",
           center: ["23%", "50%"],
           avoidLabelOverlap: false,
           label: {
@@ -103,4 +107,4 @@ class Pie {
   };
 }
 
-export { Pie };
+export { PieFactory };

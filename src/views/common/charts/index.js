@@ -1,7 +1,7 @@
-import { LineBarMix } from "./line-bar-mix";
-import { Pie } from "./pie";
-import { Bar } from "./bar";
-import { PictorialBar } from "./pictorial-bar";
-import { HeatMap } from "./heat-map";
+import { PieFactory } from "./pie";
+import { BarFactory } from "./bar";
+import { PictorialBarFactory } from "./pictorial-bar";
+import { HeatMapFactory } from "./heat-map";
+import { LineFactory } from "./line";
 
-export { LineBarMix, Pie, Bar, PictorialBar, HeatMap };
+export { PieFactory, BarFactory, PictorialBarFactory, HeatMapFactory, LineFactory };
