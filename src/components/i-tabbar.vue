@@ -1,6 +1,6 @@
 <template>
   <header class="tabbar">
-    <van-tabbar active-color="#000" v-model="active">
+    <van-tabbar v-model="active">
       <van-tabbar-item
         v-for="tabItem in tabList"
         :icon="tabItem.icon"
@@ -43,7 +43,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .tabbar {
-  ::v-deep .van-tabbar-item--active {
+  :v-deep(.van-tabbar-item--active) {
     .van-icon {
       font-weight: bold;
     }

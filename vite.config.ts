@@ -1,26 +1,31 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import { resolve } from 'path';
+import { join, resolve } from 'path';
 // https://vitejs.dev/config/
-
 export default defineConfig({
   plugins: [vue()],
   base: './',
-  alias: {
-    '@': resolve(__dirname, 'src'),
+  resolve: {
+    alias: [
+      {
+        find: '@',
+        replacement: '/src',
+      },
+      {
+        find: /^~/,
+        replacement: 'node_modules/',
+      },
+    ],
   },
   css: {
     preprocessorOptions: {
       less: {
         modifyVars: {
-          hack: `true; @import (reference) "${resolve('src/design/config.less')}";`,
+          hack: `true; @import "${resolve(__dirname, 'src/style/vant.theme.less')}";`,
         },
         javascriptEnabled: true,
       },
-      scss: {
-        // additionalData: `@import "src/styles/vw-rem/_util.scss";
-        //              @import "src/styles/vw-rem/_border.scss";`,
-      },
+      scss: {},
     },
   },
 });
