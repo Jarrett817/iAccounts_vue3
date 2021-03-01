@@ -1,23 +1,27 @@
-import axios from "axios";
-class Xhr {
-  baseURL = "";
-  modelPath = "";
-  needLoading: boolean;
+import axios from 'axios';
+interface Options {
+  method: string;
+  url: string;
+  body?: object;
+  params?: object;
+  responseType?: string;
+}
+export class Xhr {
+  baseURL = '';
+  modelPath = '';
   constructor() {
-    this.needLoading = false;
-    this.baseURL = "/gdios/gtag";
-    this.modelPath = ""; // 后端 API 根路径
+    this.baseURL = '/iAccounts';
+    this.modelPath = ''; // 后端 API 根路径
   }
-  http(options, loading?: boolean, config?) {
+  http(options: Options, config?: any) {
     const {
       method,
       url,
       body = {},
-      responseType = ""
+      responseType = '',
     }: { method: string; url: string; body: object; responseType?: string } = options;
     const reqPath = this.modelPath + url;
     let params;
-    if (method === "get") params = body;
     return axios({
       method,
       url: reqPath,
@@ -25,12 +29,11 @@ class Xhr {
       baseURL: this.baseURL,
       params,
       headers: {
-        "Content-Type": "application/json;charset=UTF-8"
+        'Content-Type': 'application/json;charset=UTF-8',
       },
       responseType,
-      _configOpts: { loading: loading ?? this.needLoading },
-      ...config
+      // 其余自定义选项
+      ...config,
     });
   }
 }
-export default Xhr;

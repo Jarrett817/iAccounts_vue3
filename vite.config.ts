@@ -5,6 +5,15 @@ import { resolve } from 'path';
 export default defineConfig({
   plugins: [vue()],
   base: './',
+  server: {
+    port: 3000,
+    proxy: {
+      '^/iAccounts': {
+        target: 'https://www.fastmock.site/mock/eff966340c7c104aca296f8e38971d9b',
+        changeOrigin: true,
+      },
+    },
+  },
   resolve: {
     alias: [
       {
