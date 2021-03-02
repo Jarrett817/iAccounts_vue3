@@ -18,10 +18,16 @@ export class Xhr {
       method,
       url,
       body = {},
+      params = {},
       responseType = '',
-    }: { method: string; url: string; body: object; responseType?: string } = options;
+    }: {
+      method: string;
+      url: string;
+      params?: object;
+      body?: object;
+      responseType?: string;
+    } = options;
     const reqPath = this.modelPath + url;
-    let params;
     return axios({
       method,
       url: reqPath,
