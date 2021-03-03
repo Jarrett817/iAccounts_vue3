@@ -19,15 +19,9 @@ export default defineComponent({ name: 'Layout', setup() {} });
   justify-self: center;
   height: 100%;
   width: 100%;
-  header {
-    flex: 1 0;
-  }
-  main {
-    flex: 8 0;
-  }
 
-  footer {
-    flex: 1 0;
+  main {
+    flex: 1;
   }
 }
 </style>
