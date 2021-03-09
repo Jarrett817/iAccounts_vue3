@@ -5,10 +5,13 @@ import '@/util/rem';
 import '@/assets/style/index.scss';
 import { router } from '@/router';
 import { store } from '@/store';
-import { vantPlugin } from '@/plugins/vant-plugin';
+import Vant from 'vant';
+import 'vant/lib/index.less';
+
+// import { vantPlugin } from '@/plugins/vant-plugin';
 
 const app = createApp(App);
 app.use(router);
 app.use(store);
-app.use(vantPlugin);
+app.use(Vant);
 app.mount('#app');
