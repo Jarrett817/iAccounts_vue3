@@ -3,10 +3,10 @@
  * @param {Object} list 图表生成参数
  * {
  *  //对应图例进行分组
- *  legendData:{
- *    "ANDROID":androidSaturation,
- *    "IOS":iosSaturation
- *  },
+ *  legendData:[
+ *    {name:"ANDROID",field:"androidSaturation"},
+ *    {name:"IOS",field:"iosSaturation"}
+ *  ],
  *  valueAxisData: "饱和度（折线图）",
  *  data:[
  *    {
@@ -29,14 +29,15 @@ class LineFactory extends ChartFactory {
       categoryAxisData: [],
       seriesData: []
     };
-    model.legendData = Object.keys(list.legendData);
-    model.legendData.forEach(legend => {
+    model.legendData = list.legendData.map(item => item.name);
+    model.legendData.forEach(legendName => {
       const dataArray = list.data.map(item => {
         model.categoryAxisData.push(item.categoryData);
-        return item[list.legendData[legend]];
+        const seriesField = list.legendData.find(item => item.name === legendName).field;
+        return item[seriesField];
       });
       model.seriesData.push({
-        name: legend,
+        name: legendName,
         type: "line",
         data: dataArray
       });

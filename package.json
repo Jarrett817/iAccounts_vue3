@@ -7,9 +7,11 @@
     "serve": "vite preview"
   },
   "dependencies": {
+    "@types/lodash": "^4.14.168",
     "amfe-flexible": "^2.2.1",
     "axios": "^0.21.1",
     "dayjs": "^1.10.4",
+    "lodash": "^4.17.21",
     "vant": "^3.0.7",
     "vue": "^3.0.5",
     "vue-router": "^4.0.3",
