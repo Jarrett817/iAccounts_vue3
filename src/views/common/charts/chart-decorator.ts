@@ -5,7 +5,7 @@ const chartDecorator = (targetClass: any, plugins: PluginFn[]) => {
   let getChatOpt = targetClass.prototype.getChatOpt;
   targetClass.prototype.getChatOpt = function () {
     plugins.forEach((fn: PluginFn) => {
-      fn(this.option, this.data);
+      fn(this.option, this.data, this.otherParams);
     });
     getChatOpt.apply(this);
   };
@@ -14,9 +14,11 @@ const chartDecorator = (targetClass: any, plugins: PluginFn[]) => {
 class Chart implements ChartInterface {
   option: ChartOption;
   data: object;
+  otherParams: any;
   constructor(data: object) {
     this.option = {};
     this.data = data;
+    this.otherParams = null;
   }
   getChartOpt() {
     return this.option;

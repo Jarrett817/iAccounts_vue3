@@ -27,7 +27,8 @@
     "src/**/*.tsx",
     "src/**/*.vue",
     "src/components/i-layout.vue",
-    "src/components/i-tabbar.vue"
+    "src/components/i-tabbar.vue",
+    "src/views/common/charts/plugins.js"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

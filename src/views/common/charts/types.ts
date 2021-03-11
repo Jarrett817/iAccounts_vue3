@@ -1,11 +1,11 @@
 interface ChartOption {
   title?: object;
   toolTip?: object;
-  legend?: object | object[];
+  legend?: any | any[];
   grid?: object | object[];
   xAxis?: object | object[];
   yAxis?: object | object[];
-  series?: object[];
+  series?: any[];
 }
 interface ChartInterface {
   option: object;
@@ -13,23 +13,12 @@ interface ChartInterface {
   getChartOpt: () => object;
   addCustomOpt: (option: object) => void;
 }
-// type legend = {
-//   data: string[];
-// };
+
 type Serie = {
   name: string;
   data: number[];
 };
-type category = {};
-type DataItem = {
-  name: string;
-  value: number;
-};
-type DataSet = {
-  legendData: string[] | string[][];
-  seriesData: Serie[];
-  categoryData?: object[] | string[][];
-};
-type PluginFn = (option: ChartOption, data: any) => void;
 
-export { ChartOption, PluginFn, DataSet, ChartInterface, Serie, DataItem };
+type PluginFn = (option: ChartOption, data: any, otherParams?: any) => void;
+
+export { ChartOption, PluginFn, ChartInterface, Serie };

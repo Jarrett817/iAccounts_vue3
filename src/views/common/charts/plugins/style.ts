@@ -66,6 +66,15 @@ const barStyle = {
     top: '3%',
     containLabel: true,
   },
+  xAxis: {
+    type: 'category',
+    axisLabel: {
+      formatter: '{value}',
+    },
+  },
+  yAxis: {
+    ...valueAxisStyle,
+  },
   series: [
     {
       ...barSerieBaseStyle,
@@ -74,6 +83,18 @@ const barStyle = {
       ...barSerieBaseStyle,
     },
   ],
+};
+const stackBarStyle = {
+  ...barStyle,
+  xAxis: {
+    ...valueAxisStyle,
+  },
+  yAxis: {
+    type: 'category',
+    axisLabel: {
+      formatter: '{value}',
+    },
+  },
 };
 const lineBarMixStyle = {
   ...barStyle,
@@ -113,20 +134,111 @@ const lineBarMixStyle = {
     },
   ],
 };
-const stackBarStyle = {
+const reflectedBarStyle = {
   ...barStyle,
-  xAxis: {
-    ...valueAxisStyle,
-  },
-  yAxis: {
-    type: 'category',
-    axisLabel: {
-      formatter: '{value}',
+  legend: [
+    {
+      // data: ['tgi>=100', 'tgi<=100'],
+      x: 'left',
+      bottom: 0,
     },
+    {
+      // data: ['Android'],
+      x: 'right',
+      bottom: 0,
+    },
+  ],
+  axisPointer: {
+    link: { xAxisIndex: 'all' },
   },
+  grid: [
+    {
+      left: '52%',
+      right: 50,
+    },
+    {
+      left: 50,
+      right: '52%',
+    },
+  ],
+  xAxis: [
+    {
+      type: 'value',
+    },
+    {
+      gridIndex: 1,
+      type: 'value',
+      inverse: true,
+    },
+  ],
+  yAxis: [
+    {
+      type: 'category',
+    },
+    {
+      gridIndex: 1,
+      axisLabel: {
+        show: false,
+      },
+      type: 'category',
+    },
+  ],
+  series: [
+    {
+      barMaxWidth: 25,
+      barMinWidth: 20,
+      // name: 'Android',
+      type: 'bar',
+      label: {
+        show: true,
+        position: 'top',
+      },
+      // data: [7, 0.96, 0.96, 0.95],
+    },
+    {
+      barMaxWidth: 25,
+      barMinWidth: 20,
+      // name: 'tgi>=100',
+      type: 'bar',
+      xAxisIndex: 1,
+      yAxisIndex: 1,
+      label: {
+        show: true,
+        position: 'bottom',
+      },
+      // data: [2, null, 6, null],
+    },
+    {
+      barMaxWidth: 25,
+      barMinWidth: 20,
+      // name: 'tgi<=100',
+      type: 'bar',
+      xAxisIndex: 1,
+      yAxisIndex: 1,
+      label: {
+        show: true,
+        position: 'bottom',
+      },
+      // data: [null, 3, null, 7],
+      barGap: '-100%',
+      markLine: {
+        silent: true,
+        symbol: 'none',
+        lineStyle: {
+          symbol: 'none',
+          color: '#333',
+        },
+        data: [
+          {
+            xAxis: 100,
+          },
+        ],
+      },
+    },
+  ],
 };
 const heatMapStyle = {
-  tooltip: {},
+  ...baseChartStyle,
   grid: {
     height: '68%',
     width: '80%',
@@ -265,7 +377,7 @@ const pieStyle = {
   series: [
     {
       type: 'pie',
-      radius: ['28%', '44%'],
+      // radius: ['28%', '44%'],
       center: ['23%', '50%'],
       avoidLabelOverlap: false,
       label: {
@@ -286,4 +398,11 @@ const pieStyle = {
   ],
 };
 
-export { barSerieBaseStyle, lineBarMixStyle, stackBarStyle, pieStyle };
+export {
+  lineBarMixStyle,
+  stackBarStyle,
+  pieStyle,
+  pictorialBarStyle,
+  heatMapStyle,
+  reflectedBarStyle,
+};
