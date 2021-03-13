@@ -25,7 +25,7 @@ export default {
     resizeChart() {
       this.chart && this.chart.resize();
     },
-    render(config, renderer) {
+    renderChart(config, renderer) {
       if (!this.chart) {
         window.addEventListener("resize", this.resizeHandle);
       }

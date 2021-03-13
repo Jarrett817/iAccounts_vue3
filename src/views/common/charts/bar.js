@@ -63,7 +63,8 @@ export function getBarOption(config) {
   const { isTransverse, isStack, tooltipFormatter, addLines, data, showLegend } = config;
   if (addLines) {
     merge(result, lineBarMixStyle);
-    Object.assign(result.series, [getLineSerie("#30b9f3"), getLineSerie("#676ce5")]);
+    result.series.push(getLineSerie("#30b9f3"));
+    result.series.push(getLineSerie("#676ce5"));
   } else {
     merge(result, barStyle);
     result.series = [];
@@ -79,8 +80,9 @@ export function getBarOption(config) {
   if (tooltipFormatter) result.tooltip.formatter = tooltipFormatter;
   if (isStack) stackSeries(result);
   if (isTransverse) transverse(result);
-  if (!showLegend) {
+  if (showLegend === false) {
     result.legend.show = false;
+    result.grid.bottom = "3%";
   }
   return result;
 }

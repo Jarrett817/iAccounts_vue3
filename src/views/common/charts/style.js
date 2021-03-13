@@ -19,7 +19,9 @@ const twoDecimalsFormatter = value => {
 const barSerieBaseStyle = {
   type: "bar",
   barMaxWidth: 25,
-  barMinWidth: 20
+  barMinWidth: 20,
+  barGap: "100%",
+  barCategoryGap: "40%"
 };
 const valueAxisStyle = {
   type: "value",
@@ -50,10 +52,11 @@ const baseChartStyle = {
   series: []
 };
 const pieStyle = {
-  ...baseChartStyle,
   tooltip: {
     trigger: "item",
-    formatter: "{b}: {c} ({d}%)"
+    formatter: params => {
+      return `${params.data[0]}: ${params.data[1]} (${params.percent}%)`;
+    }
   },
   width: "100%",
   legend: {
@@ -77,7 +80,6 @@ const pieStyle = {
   series: [
     {
       type: "pie",
-      // radius: ['28%', '44%'],
       center: ["23%", "50%"],
       avoidLabelOverlap: false,
       label: {
@@ -109,8 +111,8 @@ const barStyle = {
   grid: {
     left: "3%",
     right: "3%",
-    // bottom: "40",
-    // top: "3%",
+    bottom: 40,
+    top: "6%",
     containLabel: true
   },
   xAxis: {
@@ -143,17 +145,10 @@ const lineBarMixStyle = {
     }
   },
   xAxis: {
+    type: "category",
     axisLabel: {
       formatter: "{value}"
     }
-  },
-  legend: rectLegendStyle,
-  grid: {
-    left: "3%",
-    right: "3%",
-    bottom: "12%",
-    top: "12%",
-    containLabel: true
   },
   yAxis: [
     {
@@ -167,6 +162,118 @@ const lineBarMixStyle = {
         formatter: twoDecimalsFormatter
       }
     }
+  ],
+  legend: rectLegendStyle,
+  grid: {
+    left: "3%",
+    right: "3%",
+    bottom: "12%",
+    top: "12%",
+    containLabel: true
+  }
+};
+
+const pictorialBarStyle = {
+  yAxis: {
+    inverse: true,
+    axisTick: {
+      show: false
+    },
+    axisLine: {
+      show: false
+    },
+    axisLabel: {
+      margin: 10,
+      color: "#9DACD1",
+      fontSize: 16
+    },
+    axisPointer: {
+      show: true,
+      type: "none",
+      label: {
+        show: false
+      }
+    }
+  },
+  xAxis: {
+    show: false
+  },
+  grid: {
+    top: "center",
+    height: 200,
+    left: "15%",
+    right: "25%",
+    width: "50%"
+  }
+};
+const heatMapStyle = {
+  tooltip: {
+    trigger: "item"
+  },
+  grid: {
+    height: "68%",
+    width: "80%",
+    top: "15%",
+    left: "12%"
+  },
+  xAxis: {
+    type: "category",
+    splitArea: {
+      show: true
+    },
+    axisLabel: {
+      color: "#B8C8EE",
+      interval: 0
+    },
+    position: "top"
+  },
+  yAxis: {
+    type: "category",
+    splitArea: {
+      show: true
+    },
+    axisLabel: {
+      color: "#B8C8EE",
+      interval: 0
+    }
+  },
+  visualMap: {
+    calculable: true,
+    orient: "horizontal",
+    left: "center",
+    bottom: "2%",
+    text: ["高", "低"],
+    precision: 2,
+    textStyle: {
+      color: "#B8C8EE"
+    },
+    inRange: {
+      color: ["#FFF6E3", "#f1a699", "#f3241d"]
+    }
+  },
+  series: [
+    {
+      type: "heatmap",
+      label: {
+        show: true
+      },
+      blur: {
+        itemStyle: {
+          opacity: 0.8
+        }
+      },
+      emphasis: {
+        focus: "self",
+        blurScope: "coordinateSystem",
+        itemStyle: {
+          shadowBlur: 15,
+          shadowColor: "rgba(0, 0, 0, 0.6)"
+        },
+        label: {
+          fontSize: 18
+        }
+      }
+    }
   ]
 };
-export { pieStyle, barStyle, lineBarMixStyle, barSerieBaseStyle };
+export { pieStyle, barStyle, lineBarMixStyle, barSerieBaseStyle, pictorialBarStyle, heatMapStyle };
