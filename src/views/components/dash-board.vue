@@ -1,17 +1,16 @@
 <template>
   <div class="dash-board">
-    <h2>当月支出</h2>
+    <h2>{{ month }}月支出</h2>
     <h2 class="expend">{{ expend }}</h2>
     <h3>
-      <span>当月收入</span><span class="income">{{ income }}</span>
+      <span>{{ month }}月收入</span><span class="income">{{ income }}</span>
     </h3>
-    <van-divider dashed></van-divider>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
-
+import { computed, defineComponent } from 'vue';
+import dayjs from 'dayjs';
 export default defineComponent({
   components: {},
   props: {
@@ -25,8 +24,19 @@ export default defineComponent({
       required: true,
       default: 0,
     },
+    curMonth: {
+      type: Date,
+      default: null,
+      required: true,
+    },
   },
-  setup(props) {},
+  setup(props) {
+    const month = computed(() => {
+      if (dayjs().isSame(props.curMonth, 'month')) return '当';
+      return dayjs(props.curMonth).month();
+    });
+    return { month };
+  },
 });
 </script>
 

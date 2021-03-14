@@ -8,8 +8,6 @@ import { store } from '@/store';
 import Vant from 'vant';
 import 'vant/lib/index.less';
 
-// import { vantPlugin } from '@/plugins/vant-plugin';
-
 const app = createApp(App);
 app.use(router);
 app.use(store);

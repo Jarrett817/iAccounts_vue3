@@ -1,7 +1,7 @@
 <template>
   <i-layout>
     <template v-slot:header>
-      <van-nav-bar title="iAccounts·爱记账" @click-left="onClickLeft" @click-right="onClickRight">
+      <van-nav-bar title="iAccounts" @click-left="onClickLeft" @click-right="onClickRight">
         <template #left>
           <van-icon name="search" size="18" />
         </template>
@@ -11,11 +11,17 @@
       </van-nav-bar>
     </template>
     <template v-slot:main>
-      <dash-board :expend="monthlyExpend" :income="monthlyIncome"></dash-board>
+      <dash-board
+        :curMonth="dashBoardMonth"
+        :expend="monthlyExpend"
+        :income="monthlyIncome"
+      ></dash-board>
       <van-dropdown-menu>
-        <van-dropdown-item @open="handleOpen">{{}}</van-dropdown-item>
+        <van-dropdown-item ref="datePickerDropdown" :title="formattedDate">
+          <date-picker v-model:timeValue="timeValue" @dateConfirm="handleConfirm"></date-picker>
+        </van-dropdown-item>
+        <van-dropdown-item v-model="curType" :options="listTypeOptions"> </van-dropdown-item>
       </van-dropdown-menu>
-      <date-picker v-model:visible="datePickerVisible"></date-picker>
     </template>
     <template v-slot:footer> <i-tabbar></i-tabbar> </template>
   </i-layout>
@@ -26,23 +32,63 @@ import ILayout from '@/components/i-layout.vue';
 import ITabbar from '@/components/i-tabbar.vue';
 import DashBoard from '../components/dash-board.vue';
 import DatePicker from '../components/date-picker.vue';
-import { defineComponent, ref } from 'vue';
+import { computed, defineComponent, nextTick, ref, watch } from 'vue';
 import { statisticService } from '@/services/';
+import { ListItem } from './types';
+import dayjs from 'dayjs';
 export default defineComponent({
   components: { ILayout, ITabbar, DashBoard, DatePicker },
   setup() {
+    const datePickerDropdown = ref(null);
     const monthlyExpend = ref<number>(0);
     const monthlyIncome = ref<number>(0);
-    const datePickerVisible = ref(false);
-    statisticService.getBalanceByTimeSlot({ startTime: 12312312, endTime: 1231 }).then((res) => {
-      const { expend, income } = res;
-      monthlyExpend.value = expend;
-      monthlyIncome.value = income;
+    const detailList = ref<ListItem[]>([]);
+    // 默认获取当月时间
+    const curDate = new Date();
+    // 给datePicker设置默认值
+    const timeValue = ref(curDate);
+    const dashBoardMonth = ref(curDate);
+    const formattedDate = computed(() => {
+      return dayjs(timeValue.value).format('YYYY-MM');
     });
-    const handleOpen = () => {
-      datePickerVisible.value = !datePickerVisible.value;
+    const listTypeOptions = [
+      { text: '全部', value: 0 },
+      { text: '支出', value: 1 },
+      { text: '收入', value: 2 },
+    ];
+    const curType = ref(0);
+    const getStatistic = (date: Date, listType: number) => {
+      const startTime = dayjs(date).startOf('month').valueOf();
+      const endTime = dayjs(date).endOf('month').valueOf();
+      statisticService.getBalanceByTimeSlot({ startTime, endTime, listType }).then((res) => {
+        const { expend, income, detail } = res;
+        monthlyExpend.value = expend;
+        monthlyIncome.value = income;
+        detailList.value = detail;
+      });
     };
-    return { monthlyExpend, monthlyIncome, handleOpen, datePickerVisible };
+    getStatistic(timeValue.value, curType.value);
+    const handleConfirm = (value: Date) => {
+      if (value) {
+        getStatistic(value, curType.value);
+        dashBoardMonth.value = value;
+      }
+      datePickerDropdown.value.toggle();
+    };
+    watch(curType, (val) => {
+      getStatistic(timeValue.value, val);
+    });
+    return {
+      monthlyExpend,
+      monthlyIncome,
+      timeValue,
+      formattedDate,
+      datePickerDropdown,
+      handleConfirm,
+      curType,
+      listTypeOptions,
+      dashBoardMonth,
+    };
   },
 });
 </script>

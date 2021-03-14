@@ -1,61 +1,41 @@
 <template>
   <div>
-    <van-action-sheet
-      v-model:show="handleShow"
-      :actions="actions"
-      @select="onSelect"
-      @opened="handleSheetOpen"
-    >
-      <van-datetime-picker
-        v-model="currentMonth"
-        type="year-month"
-        title="选择年月"
-        visible-item-count="7"
-        :confirm="handleConfirm"
-        ref="pickerRef"
-      ></van-datetime-picker>
-    </van-action-sheet>
+    <van-datetime-picker
+      v-model="currentDate"
+      type="year-month"
+      title="选择年月"
+      visible-item-count="5"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
+    ></van-datetime-picker>
   </div>
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed, onMounted, nextTick } from 'vue';
-import dayjs from 'dayjs';
+import { defineComponent, ref, computed } from 'vue';
 export default defineComponent({
   components: {},
   props: {
-    curMonth: {
-      type: Number,
+    timeValue: {
+      type: Date,
       default: null,
     },
-    visible: {
-      type: Boolean,
-      default: false,
-    },
   },
-  emits: ['update:visible'],
+  emits: ['update:timeValue', 'dateConfirm'],
   setup(props, context) {
-    const pickerRef = ref(null);
-    const curYear = dayjs().format('YYYY');
-    const curMonth = dayjs().format('YYYY-MM');
-    const handleShow = computed({
-      get: () => props.visible,
+    const currentDate = computed({
+      get: () => props.timeValue,
       set: (val) => {
-        context.emit('update:visible', val);
+        context.emit('update:timeValue', val);
       },
     });
-    const handleSheetOpen = async () => {
-      await nextTick();
-      const pickerInstance = pickerRef.value.getPicker();
-      //设置默认日期
-      pickerInstance.setColumnValue(0, curYear);
-      pickerInstance.setColumnValue(1, curMonth);
+    const handleConfirm = (value: Date) => {
+      context.emit('dateConfirm', value);
     };
-    // const handleConfirm = (value) => {
-    //   console.log(value);
-    //   handleShow.value = false;
-    // };
-    return { handleShow, pickerRef, handleSheetOpen, handleConfirm };
+    const handleCancel = () => {
+      context.emit('dateConfirm');
+    };
+    return { handleConfirm, currentDate, handleCancel };
   },
 });
 </script>
