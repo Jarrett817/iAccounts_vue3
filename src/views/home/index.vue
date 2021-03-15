@@ -11,17 +11,22 @@
       </van-nav-bar>
     </template>
     <template v-slot:main>
-      <dash-board
-        :curMonth="dashBoardMonth"
-        :expend="monthlyExpend"
-        :income="monthlyIncome"
-      ></dash-board>
-      <van-dropdown-menu>
-        <van-dropdown-item ref="datePickerDropdown" :title="formattedDate">
-          <date-picker v-model:timeValue="timeValue" @dateConfirm="handleConfirm"></date-picker>
-        </van-dropdown-item>
-        <van-dropdown-item v-model="curType" :options="listTypeOptions"> </van-dropdown-item>
-      </van-dropdown-menu>
+      <div class="home-main-wrap" ref="listContainer">
+        <dash-board
+          :curMonth="dashBoardMonth"
+          :expend="monthlyExpend"
+          :income="monthlyIncome"
+        ></dash-board>
+        <van-sticky :container="listContainer">
+          <van-dropdown-menu>
+            <van-dropdown-item ref="datePickerDropdown" :title="formattedDate">
+              <date-picker v-model:timeValue="timeValue" @dateConfirm="handleConfirm"></date-picker>
+            </van-dropdown-item>
+            <van-dropdown-item v-model="curType" :options="listTypeOptions"> </van-dropdown-item>
+          </van-dropdown-menu>
+        </van-sticky>
+        <div class="list-wrap"><bill-list :listData="detailList"></bill-list></div>
+      </div>
     </template>
     <template v-slot:footer> <i-tabbar></i-tabbar> </template>
   </i-layout>
@@ -32,13 +37,16 @@ import ILayout from '@/components/i-layout.vue';
 import ITabbar from '@/components/i-tabbar.vue';
 import DashBoard from '../components/dash-board.vue';
 import DatePicker from '../components/date-picker.vue';
+import BillList from './bill-list.vue';
 import { computed, defineComponent, nextTick, ref, watch } from 'vue';
 import { statisticService } from '@/services/';
 import { ListItem } from './types';
 import dayjs from 'dayjs';
+
 export default defineComponent({
-  components: { ILayout, ITabbar, DashBoard, DatePicker },
+  components: { ILayout, ITabbar, DashBoard, DatePicker, BillList },
   setup() {
+    BillList;
     const datePickerDropdown = ref(null);
     const monthlyExpend = ref<number>(0);
     const monthlyIncome = ref<number>(0);
@@ -51,6 +59,7 @@ export default defineComponent({
     const formattedDate = computed(() => {
       return dayjs(timeValue.value).format('YYYY-MM');
     });
+    const listContainer = ref(null);
     const listTypeOptions = [
       { text: '全部', value: 0 },
       { text: '支出', value: 1 },
@@ -88,16 +97,20 @@ export default defineComponent({
       curType,
       listTypeOptions,
       dashBoardMonth,
+      detailList,
+      listContainer,
     };
   },
 });
 </script>
 
 <style lang="scss" scoped>
-.title {
-  font-size: 18px;
-}
-.van-datetime-picker {
-  height: 50px;
+.home-main-wrap {
+  overflow: auto;
+  .van-datetime-picker {
+    height: 50px;
+  }
+  .list-wrap {
+  }
 }
 </style>
