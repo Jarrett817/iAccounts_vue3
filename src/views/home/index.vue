@@ -38,11 +38,10 @@ import ITabbar from '@/components/i-tabbar.vue';
 import DashBoard from '../components/dash-board.vue';
 import DatePicker from '../components/date-picker.vue';
 import BillList from './bill-list.vue';
-import { computed, defineComponent, nextTick, ref, watch } from 'vue';
+import { computed, defineComponent, ref, watch } from 'vue';
 import { statisticService } from '@/services/';
 import { ListItem } from './types';
 import dayjs from 'dayjs';
-
 export default defineComponent({
   components: { ILayout, ITabbar, DashBoard, DatePicker, BillList },
   setup() {
@@ -66,6 +65,7 @@ export default defineComponent({
       { text: '收入', value: 2 },
     ];
     const curType = ref(0);
+
     const getStatistic = (date: Date, listType: number) => {
       const startTime = dayjs(date).startOf('month').valueOf();
       const endTime = dayjs(date).endOf('month').valueOf();
@@ -82,7 +82,7 @@ export default defineComponent({
         getStatistic(value, curType.value);
         dashBoardMonth.value = value;
       }
-      datePickerDropdown.value.toggle();
+      datePickerDropdown.value!.toggle();
     };
     watch(curType, (val) => {
       getStatistic(timeValue.value, val);

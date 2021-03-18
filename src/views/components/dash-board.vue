@@ -25,7 +25,7 @@ export default defineComponent({
       default: 0,
     },
     curMonth: {
-      type: Date,
+      type: String,
       default: null,
       required: true,
     },

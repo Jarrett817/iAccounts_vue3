@@ -1,4 +1,9 @@
 import { Xhr } from './xhr';
+interface Request {
+  expend: number;
+  income: number;
+  detail: any[];
+}
 class StatisticService extends Xhr {
   constructor() {
     super();
@@ -6,7 +11,7 @@ class StatisticService extends Xhr {
   }
 
   getBalanceByTimeSlot(params: object) {
-    return this.http({
+    return this.http<Request>({
       method: 'get',
       url: '/balance',
       params,

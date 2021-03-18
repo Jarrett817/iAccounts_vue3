@@ -13,7 +13,7 @@ export class Xhr {
     this.baseURL = '/iAccounts';
     this.modelPath = ''; // 后端 API 根路径
   }
-  http(options: Options, config?: any) {
+  http<T>(options: Options, config?: any) {
     const {
       method,
       url,
@@ -28,7 +28,7 @@ export class Xhr {
       responseType?: string;
     } = options;
     const reqPath = this.modelPath + url;
-    return axios({
+    return (axios({
       method,
       url: reqPath,
       data: body,
@@ -40,6 +40,6 @@ export class Xhr {
       responseType,
       // 其余自定义选项
       ...config,
-    });
+    }) as unknown) as Promise<T>;
   }
 }
