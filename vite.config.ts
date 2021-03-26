@@ -1,12 +1,20 @@
 import { defineConfig } from 'vite';
 import vue from '@vitejs/plugin-vue';
-import vueJsx from '@vitejs/plugin-vue-jsx';
-
+import styleImport from 'vite-plugin-style-import';
 import { resolve } from 'path';
 // https://vitejs.dev/config/
+
+const vantConfig = {
+  libraryName: 'vant',
+  esModule: true,
+  resolveStyle: (name) => {
+    return `vant/es/${name}/style`;
+  },
+};
+
 export default defineConfig({
-  plugins: [vue(), vueJsx()],
-  base: './',
+  plugins: [vue(), styleImport({ libs: [vantConfig] })],
+  base: '/',
   server: {
     port: 3000,
     proxy: {

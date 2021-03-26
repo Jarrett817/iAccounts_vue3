@@ -1,5 +1,5 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from 'vue-router';
-import { Home, Settings, Statistic, Tags } from '../views';
+import { Home, Settings, Statistic, Tags } from '@/views/';
 const routes: Array<RouteRecordRaw> = [
   { path: '/', component: Home },
   { path: '/statistic', component: Statistic },

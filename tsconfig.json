@@ -21,14 +21,6 @@
       "name": "@vuedx/typescript-plugin-vue"
     }
   ],
-  "include": [
-    "src/**/*.ts",
-    "src/**/*.d.ts",
-    "src/**/*.tsx",
-    "src/**/*.vue",
-    "src/components/i-layout.vue",
-    "src/components/i-tabbar.vue",
-    "src/views/common/charts/plugins.js"
-  ],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

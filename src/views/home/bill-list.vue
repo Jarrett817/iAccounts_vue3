@@ -13,17 +13,25 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watchEffect } from 'vue';
+import { defineComponent, PropType, ref, watchEffect } from 'vue';
 import dayjs from 'dayjs';
+interface ListData {
+  createTime: number;
+  name: string;
+  value: number;
+  desc: string;
+}
+interface groupData {
+  number: ListData[];
+}
 export default defineComponent({
   props: {
     listData: {
-      type: Array,
+      type: Array as PropType<ListData[]>,
       default: null,
     },
   },
   components: {},
-
   setup(props) {
     let result = ref({});
     watchEffect(() => {

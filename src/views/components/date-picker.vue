@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, computed } from 'vue';
+import { defineComponent, computed } from 'vue';
 export default defineComponent({
   components: {},
   props: {
@@ -24,8 +24,8 @@ export default defineComponent({
   emits: ['update:timeValue', 'dateConfirm'],
   setup(props, context) {
     const currentDate = computed({
-      get: () => props.timeValue,
-      set: (val) => {
+      get: () => props.timeValue as Date,
+      set: (val: Date) => {
         context.emit('update:timeValue', val);
       },
     });

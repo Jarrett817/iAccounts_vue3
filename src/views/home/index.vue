@@ -43,10 +43,16 @@ import { statisticService } from '@/services/';
 import { ListItem } from './types';
 import dayjs from 'dayjs';
 export default defineComponent({
-  components: { ILayout, ITabbar, DashBoard, DatePicker, BillList },
+  components: {
+    ILayout,
+    ITabbar,
+    DashBoard,
+    DatePicker,
+    BillList,
+  },
   setup() {
     BillList;
-    const datePickerDropdown = ref(null);
+    const datePickerDropdown = ref<{ toggle: Function } | null>(null);
     const monthlyExpend = ref<number>(0);
     const monthlyIncome = ref<number>(0);
     const detailList = ref<ListItem[]>([]);
