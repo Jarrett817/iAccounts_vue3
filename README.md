@@ -112,3 +112,9 @@ resolve: {
     ],
   },
 ```
+2. 全局注册vant ui的组件，vueDx会报错，提示“The component 'van-nav-bar' is inferred as global component. It may not be available at runtime.”
+- [vueDx作者在issue中针对此问题的回复](https://github.com/znck/vue-developer-experience/issues/197)
+- 尝试配置了vueconfig.json后并不起效，发现只要有一个空的vueconfig.json文件放在项目根目录就不再有这个报错，可能是个bug？
+
+2. 全局注册vant ui的组件，vueDx会报错，提示“The component 'van-nav-bar' is inferred as global component. It may not be available at runtime.”vue
+2. 全局注册vant ui的组件，vueDx会报错，提示“The component 'van-nav-bar' is inferred as global component. It may not be available at runtime.”
