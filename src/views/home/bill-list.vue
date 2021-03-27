@@ -22,7 +22,7 @@ interface ListData {
   desc: string;
 }
 interface groupData {
-  number: ListData[];
+  [key: string]: ListData[];
 }
 export default defineComponent({
   props: {
@@ -33,15 +33,16 @@ export default defineComponent({
   },
   components: {},
   setup(props) {
-    let result = ref({});
+    let groups: groupData = {};
+    let result = ref<ListData[][]>([]);
     watchEffect(() => {
       // 聚合同一天的数据
       props.listData.forEach((dataItem) => {
         const date = dayjs(dataItem.createTime).valueOf().toString();
-        result.value[date] ? result.value[date].push(dataItem) : (result.value[date] = [dataItem]);
+        groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
       });
-      result.value = Object.keys(result.value).map((key) => {
-        return result.value[key];
+      result.value = Object.keys(groups).map((key: string) => {
+        return groups[key];
       });
     });
 

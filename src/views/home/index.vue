@@ -117,6 +117,7 @@ export default defineComponent({
     height: 50px;
   }
   .list-wrap {
+    overflow: auto;
   }
 }
 </style>

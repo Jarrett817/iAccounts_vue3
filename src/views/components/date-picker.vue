@@ -24,7 +24,7 @@ export default defineComponent({
   emits: ['update:timeValue', 'dateConfirm'],
   setup(props, context) {
     const currentDate = computed({
-      get: () => props.timeValue as Date,
+      get: () => (props.timeValue as unknown) as Date,
       set: (val: Date) => {
         context.emit('update:timeValue', val);
       },
