@@ -11,13 +11,13 @@
       </van-nav-bar>
     </template>
     <template v-slot:main>
-      <div class="home-main-wrap" ref="listContainer">
+      <div class="home-main-wrap">
         <dash-board
           :curMonth="dashBoardMonth"
           :expend="monthlyExpend"
           :income="monthlyIncome"
         ></dash-board>
-        <van-sticky :container="listContainer">
+        <van-sticky :offset-top="45">
           <van-dropdown-menu>
             <van-dropdown-item ref="datePickerDropdown" :title="formattedDate">
               <date-picker v-model:timeValue="timeValue" @dateConfirm="handleConfirm"></date-picker>
@@ -112,12 +112,14 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .home-main-wrap {
+  height: 100%;
   overflow: auto;
   .van-datetime-picker {
     height: 50px;
   }
   .list-wrap {
     overflow: auto;
+    height: 100%;
   }
 }
 </style>
