@@ -1,4 +1,4 @@
-<template>设置</template>
+<template>设置<i-tabbar></i-tabbar></template>
 
 <script lang="ts"></script>
 

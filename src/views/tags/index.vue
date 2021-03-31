@@ -1,4 +1,4 @@
-<template>标签管理</template>
+<template>标签管理<i-tabbar></i-tabbar></template>
 
 <script lang="ts"></script>
 

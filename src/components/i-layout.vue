@@ -9,9 +9,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-export default defineComponent({ name: 'Layout', setup() {} });
+export default defineComponent({ name: "iLayout", setup() {} });
 </script>
 
 <style lang="scss" scoped>

@@ -33,22 +33,18 @@
 </template>
 
 <script lang="ts">
-import ILayout from '@/components/i-layout.vue';
-import ITabbar from '@/components/i-tabbar.vue';
-import DashBoard from '../components/dash-board.vue';
-import DatePicker from '../components/date-picker.vue';
-import BillList from './bill-list.vue';
-import { computed, defineComponent, ref, watch } from 'vue';
-import { statisticService } from '@/services/';
-import { ListItem } from './types';
-import dayjs from 'dayjs';
+import DashBoard from "../components/dash-board.vue";
+import DatePicker from "../components/date-picker.vue";
+import BillList from "./bill-list.vue";
+import { computed, defineComponent, ref, watch } from "vue";
+import { statisticService } from "@/services/";
+import { ListItem } from "./types";
+import dayjs from "dayjs";
 export default defineComponent({
   components: {
-    ILayout,
-    ITabbar,
     DashBoard,
     DatePicker,
-    BillList,
+    BillList
   },
   setup() {
     BillList;
@@ -62,20 +58,20 @@ export default defineComponent({
     const timeValue = ref(curDate);
     const dashBoardMonth = ref(curDate);
     const formattedDate = computed(() => {
-      return dayjs(timeValue.value).format('YYYY-MM');
+      return dayjs(timeValue.value).format("YYYY-MM");
     });
     const listContainer = ref(null);
     const listTypeOptions = [
-      { text: '全部', value: 0 },
-      { text: '支出', value: 1 },
-      { text: '收入', value: 2 },
+      { text: "全部", value: 0 },
+      { text: "支出", value: 1 },
+      { text: "收入", value: 2 }
     ];
     const curType = ref(0);
 
     const getStatistic = (date: Date, listType: number) => {
-      const startTime = dayjs(date).startOf('month').valueOf();
-      const endTime = dayjs(date).endOf('month').valueOf();
-      statisticService.getBalanceByTimeSlot({ startTime, endTime, listType }).then((res) => {
+      const startTime = dayjs(date).startOf("month").valueOf();
+      const endTime = dayjs(date).endOf("month").valueOf();
+      statisticService.getBalanceByTimeSlot({ startTime, endTime, listType }).then(res => {
         const { expend, income, detail } = res;
         monthlyExpend.value = expend;
         monthlyIncome.value = income;
@@ -90,7 +86,7 @@ export default defineComponent({
       }
       datePickerDropdown.value!.toggle();
     };
-    watch(curType, (val) => {
+    watch(curType, val => {
       getStatistic(timeValue.value, val);
     });
     return {
@@ -104,16 +100,16 @@ export default defineComponent({
       listTypeOptions,
       dashBoardMonth,
       detailList,
-      listContainer,
+      listContainer
     };
-  },
+  }
 });
 </script>
 
 <style lang="scss" scoped>
 .home-main-wrap {
   height: 100%;
-  overflow: auto;
+
   .van-datetime-picker {
     height: 50px;
   }
