@@ -15,19 +15,22 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, watchEffect } from 'vue';
 import dayjs from 'dayjs';
-import { GroupData, ListData } from './types';
+import { ListItem } from './types';
 
+interface GroupData {
+  [key: string]: ListItem[];
+}
 export default defineComponent({
   props: {
     listData: {
-      type: Array as PropType<ListData[]>,
+      type: Array as PropType<ListItem[]>,
       default: null,
     },
   },
   components: {},
   setup(props) {
     let groups: GroupData = {};
-    let result = ref<ListData[][]>([]);
+    let result = ref<ListItem[][]>([]);
     watchEffect(() => {
       // 聚合同一天的数据
       props.listData.forEach((dataItem) => {
