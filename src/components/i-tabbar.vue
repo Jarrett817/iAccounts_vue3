@@ -41,7 +41,7 @@ export default defineComponent({
         field: "statistic",
         route: "/statistic"
       },
-      { icon: "setting-o", field: "setting", route: "/settings" }
+      { icon: "user-circle-o", field: "user", route: "/user" }
     ];
     const moneyPannelVisible = ref<boolean>(false);
     const handleTabbarChange = (activeIndex: number) => {
