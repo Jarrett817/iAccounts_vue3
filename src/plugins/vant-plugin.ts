@@ -9,8 +9,11 @@ import {
   DropdownMenu,
   DropdownItem,
   DatetimePicker,
-} from 'vant';
-import { App } from 'vue';
+  Popup,
+  Tab,
+  Tabs
+} from "vant";
+import { App } from "vue";
 const componentArray = [
   CellGroup,
   Cell,
@@ -22,15 +25,18 @@ const componentArray = [
   DropdownMenu,
   DropdownItem,
   DatetimePicker,
+  Popup,
+  Tab,
+  Tabs
 ];
 export const vantPlugin = {
   install: (app: App) => {
-    componentArray.forEach((item) => {
-      let camelCase = '';
-      item.name.split('-').forEach((item) => {
+    componentArray.forEach(item => {
+      let camelCase = "";
+      item.name.split("-").forEach(item => {
         camelCase += item[0].toUpperCase() + item.slice(1);
       });
       app.component(camelCase, item);
     });
-  },
+  }
 };
