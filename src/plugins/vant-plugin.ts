@@ -11,7 +11,11 @@ import {
   DatetimePicker,
   Popup,
   Tab,
-  Tabs
+  Tabs,
+  NumberKeyboard,
+  Calendar,
+  Field,
+  Button
 } from "vant";
 import { App } from "vue";
 const componentArray = [
@@ -27,7 +31,11 @@ const componentArray = [
   DatetimePicker,
   Popup,
   Tab,
-  Tabs
+  Tabs,
+  NumberKeyboard,
+  Calendar,
+  Field,
+  Button
 ];
 export const vantPlugin = {
   install: (app: App) => {
