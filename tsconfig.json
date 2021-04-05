@@ -29,7 +29,8 @@
     "src/views/components/money-pannel.vue",
     "src/components/money-pannel.vue",
     "src/components/money-pannel.vue",
-    "src/components/tag-list.vue"
+    "src/components/tag-list.vue",
+    "src/components/date-picker.vue"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

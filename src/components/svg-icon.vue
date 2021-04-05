@@ -1,5 +1,5 @@
 <template>
-  <svg :class="svgClass" aria-hidden="true">
+  <svg :class="[svgClass, 'svg-icon']" aria-hidden="true">
     <use :xlink:href="svgName"></use>
   </svg>
 </template>
@@ -9,24 +9,19 @@ import { computed, defineComponent } from "vue";
 export default defineComponent({
   name: "SvgIcon",
   props: {
-    iconName: {
+    name: {
       type: String,
       required: true
-    },
-    className: {
-      type: String
     }
   },
   components: {},
 
   setup(props) {
     const svgName = computed(() => {
-      return `#iAccounts-${props.iconName}`;
+      return `#icon-${props.name}`;
     });
-    const svgClass = computed(() => {
-      return props.className ? `svg-icon ${props.className}` : "svg-icon";
-    });
-    return { svgName, svgClass };
+
+    return { svgName };
   }
 });
 </script>
@@ -37,6 +32,6 @@ export default defineComponent({
   height: 1em;
   fill: currentColor;
   overflow: hidden;
-  vertical-align: middle;
+  vertical-align: -0.15em;
 }
 </style>

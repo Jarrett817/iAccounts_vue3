@@ -20,7 +20,11 @@
         <van-sticky :offset-top="45">
           <van-dropdown-menu>
             <van-dropdown-item ref="datePickerDropdown" :title="formattedDate">
-              <date-picker v-model:timeValue="timeValue" @dateConfirm="handleConfirm"></date-picker>
+              <date-picker
+                title="选择年月"
+                v-model:time-value="timeValue"
+                @date-confirm="handleConfirm"
+              ></date-picker>
             </van-dropdown-item>
             <van-dropdown-item v-model="curType" :options="listTypeOptions"> </van-dropdown-item>
           </van-dropdown-menu>
@@ -31,10 +35,9 @@
     <template v-slot:footer> <i-tabbar></i-tabbar> </template>
   </i-layout>
 </template>
-
 <script lang="ts">
 import DashBoard from "../components/dash-board.vue";
-import DatePicker from "../components/date-picker.vue";
+import DatePicker from "@/components/date-picker.vue";
 import BillList from "./bill-list.vue";
 import { computed, defineComponent, ref, watch } from "vue";
 import { statisticService } from "@/services/";
@@ -55,8 +58,8 @@ export default defineComponent({
     // 默认获取当月时间
     const curDate = new Date();
     // 给datePicker设置默认值
-    const timeValue = ref(curDate);
-    const dashBoardMonth = ref(curDate);
+    const timeValue = ref<Date>(curDate);
+    const dashBoardMonth = ref<Date>(curDate);
     const formattedDate = computed(() => {
       return dayjs(timeValue.value).format("YYYY-MM");
     });
