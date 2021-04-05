@@ -3,7 +3,9 @@
     <van-tabs v-model="tabActive" @click="handleTabsClick">
       <van-tab v-for="tab in ['支出', '收入']" :title="tab" :key="tab"></van-tab>
     </van-tabs>
+    <div class="icon-list"></div>
   </van-popup>
+  
 </template>
 
 <script lang="ts">
@@ -45,5 +47,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 ::v-deep(.van-tabs__line) {
   background-color: v-bind(activeColor);
+}
+.icon-list {
+  height: 2em;
+  width: 100%;
+  overflow: auto;
 }
 </style>

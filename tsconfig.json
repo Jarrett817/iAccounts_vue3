@@ -21,6 +21,15 @@
       "name": "@vuedx/typescript-plugin-vue"
     }
   ],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"],
+  "include": [
+    "src/**/*.ts",
+    "src/**/*.d.ts",
+    "src/**/*.tsx",
+    "src/**/*.vue",
+    "src/views/components/money-pannel.vue",
+    "src/components/money-pannel.vue",
+    "src/components/money-pannel.vue",
+    "src/components/tag-list.vue"
+  ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }
