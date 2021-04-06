@@ -1,5 +1,5 @@
-import { Xhr } from './xhr';
-interface Request {
+import { Xhr } from "./xhr";
+interface Response {
   expend: number;
   income: number;
   detail: any[];
@@ -7,14 +7,14 @@ interface Request {
 class StatisticService extends Xhr {
   constructor() {
     super();
-    this.modelPath = '/statistic';
+    this.modelPath = "/statistic";
   }
 
   getBalanceByTimeSlot(params: object) {
-    return this.http<Request>({
-      method: 'get',
-      url: '/balance',
-      params,
+    return this.http<Response>({
+      method: "get",
+      url: "/balance",
+      params
     });
   }
 }

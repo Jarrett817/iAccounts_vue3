@@ -11,32 +11,41 @@
       </van-button>
       <div class="keyboard-value">{{ result.value || 0 }}</div>
     </div>
-    <van-number-keyboard
-      v-if="!datetPickerShow"
-      v-model="result.value"
-      :show="true"
-      theme="custom"
-      extra-key="."
-      close-button-text="完成"
-    >
-    </van-number-keyboard>
-    <date-picker
-      v-else
-      title="选择日期"
-      type="date"
-      visibleItemCount="4"
-      @date-confirm="handleDateConfirm"
-    ></date-picker>
+    <transition name="fade">
+      <keep-alive>
+        <van-number-keyboard
+          v-if="!datePickerShow"
+          v-model="result.value"
+          :show="true"
+          theme="custom"
+          extra-key="."
+          close-button-text="完成"
+          @close="onClose"
+          :hide-on-click-outside="false"
+          maxlength="12"
+        >
+        </van-number-keyboard>
+        <date-picker
+          v-else
+          class="date-picker"
+          title="选择日期"
+          type="date"
+          visibleItemCount="4"
+          @date-confirm="handleDateConfirm"
+        ></date-picker>
+      </keep-alive>
+    </transition>
   </van-popup>
 </template>
 
 <script lang="ts">
 import { computed, defineComponent, reactive, ref } from "vue";
 import DatePicker from "@/components/date-picker.vue";
+import { accountsService } from "@/services/";
 import dayjs from "dayjs";
 interface Result {
   date: number;
-  value: number;
+  value: string;
   type: string;
   note: string;
 }
@@ -54,11 +63,11 @@ export default defineComponent({
     const moneyPannelVisible = ref<boolean>(false);
     const result = reactive<Result>({
       date: dayjs().valueOf(),
-      value: 0,
+      value: "",
       type: "",
       note: ""
     });
-    const datetPickerShow = ref(false);
+    const datePickerShow = ref(false);
     const handleTabsClick = (index: number) => {
       if (index) {
         activeColor.value = "#e67e81";
@@ -84,14 +93,20 @@ export default defineComponent({
       }
     });
     const handleClick = () => {
-      datetPickerShow.value = !datetPickerShow.value;
+      datePickerShow.value = !datePickerShow.value;
     };
     const handleDateConfirm = (date: Date) => {
       result.date = dayjs(date).valueOf();
+      datePickerShow.value = false;
+    };
+    const onClose = () => {
+      accountsService.addAccount({ ...result, value: Number(Number(result.value).toFixed(2)) });
+      handleShow.value = false;
     };
 
     return {
-      datetPickerShow,
+      onClose,
+      datePickerShow,
       handleClick,
       buttonText,
       handleDateConfirm,
@@ -112,6 +127,7 @@ export default defineComponent({
 .van-popup {
   background-color: #f2f3f5;
 }
+
 .icon-list {
   height: 2em;
   width: 100%;
@@ -124,8 +140,8 @@ export default defineComponent({
   justify-content: space-between;
   padding: 0 12px;
   .keyboard-value {
-    line-height: 1.5em;
-    font-size: 1.5em;
+    line-height: 1em;
+    font-size: 1em;
     text-align: right;
     flex: 1;
   }
@@ -134,9 +150,33 @@ export default defineComponent({
     width: fit-content;
   }
 }
-
+.date-picker {
+  height: 222px;
+}
 .van-number-keyboard {
   position: static;
   padding-bottom: 0;
+}
+.fade-enter-from {
+  opacity: 0;
+}
+.fade-enter-active {
+  transition: opacity 0.5s ease;
+}
+.fade-enter-to {
+  opacity: 1;
+}
+.fade-leave-from {
+  position: absolute;
+}
+
+.fade-leave-active {
+  position: absolute;
+  transition: opacity 0.5s ease;
+}
+
+.fade-leave-to {
+  position: absolute;
+  opacity: 0;
 }
 </style>
