@@ -26,3 +26,10 @@ button,
 input {
   font: inherit;
 }
+
+// vant ui
+.van-field {
+  &__label {
+    width: fit-content;
+  }
+}

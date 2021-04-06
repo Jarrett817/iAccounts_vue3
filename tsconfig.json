@@ -30,7 +30,11 @@
     "src/components/money-pannel.vue",
     "src/components/money-pannel.vue",
     "src/components/tag-list.vue",
-    "src/components/date-picker.vue"
+    "src/components/date-picker.vue",
+    "src/views/components/money-pannel.vue",
+    "src/views/components/i-tabbar.vue",
+    "src/components/money-pannel.vue",
+    "src/components/i-tabbar.vue"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

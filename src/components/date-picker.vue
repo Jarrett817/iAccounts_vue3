@@ -26,7 +26,7 @@ export default defineComponent({
     },
     visibleItemCount: {
       type: String,
-      default: 5
+      default: "5"
     },
     title: {
       type: String,

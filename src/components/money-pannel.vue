@@ -1,10 +1,12 @@
 <template>
   <van-popup v-model:show="handleShow" position="bottom" get-container="body">
-    <van-tabs v-model="result.type" @click="handleTabsClick">
+    <van-tabs @click="handleTabsClick">
       <van-tab v-for="tab in ['支出', '收入']" :title="tab" :key="tab"></van-tab>
     </van-tabs>
     <div class="icon-list"></div>
-    <van-field left-icon="records" v-model="result.note" label="备注" placeholder="点击写备注" />
+    <div class="note-wrap">
+      <van-field v-model="result.note" label="备注" placeholder="点击写备注" />
+    </div>
     <div class="date-value-wrap">
       <van-button size="large" icon="src/assets/svg/date.svg" @click="handleClick">
         {{ buttonText }}
@@ -61,14 +63,18 @@ export default defineComponent({
   setup(props, context) {
     const activeColor = ref("#4ca2f8");
     const moneyPannelVisible = ref<boolean>(false);
-    const result = reactive<Result>({
+    let result = reactive<Result>({
       date: dayjs().valueOf(),
       value: "",
-      type: "",
+      type: "expend",
       note: ""
     });
+
     const datePickerShow = ref(false);
     const handleTabsClick = (index: number) => {
+      console.log(index);
+      const types = ["expend", "income"];
+      result.type = types[index];
       if (index) {
         activeColor.value = "#e67e81";
       } else {
@@ -102,6 +108,12 @@ export default defineComponent({
     const onClose = () => {
       accountsService.addAccount({ ...result, value: Number(Number(result.value).toFixed(2)) });
       handleShow.value = false;
+      setTimeout(() => {
+        result.date = dayjs().valueOf();
+        result.type = "expend";
+        result.note = "";
+        result.value = "";
+      }, 500);
     };
 
     return {
@@ -133,17 +145,21 @@ export default defineComponent({
   width: 100%;
   overflow: auto;
 }
+.van-field {
+  font-size: 16px;
+}
 .date-value-wrap {
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding: 0 12px;
+  padding: 0 16px;
+
   .keyboard-value {
-    line-height: 1em;
-    font-size: 1em;
     text-align: right;
     flex: 1;
+    line-height: 24px;
+    font-size: 24px;
   }
   .van-button {
     border: none;
@@ -152,6 +168,15 @@ export default defineComponent({
 }
 .date-picker {
   height: 222px;
+}
+.note-wrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .icon-note {
+    font-size: 18px;
+    margin-left: 18px;
+  }
 }
 .van-number-keyboard {
   position: static;

@@ -13,13 +13,13 @@ interface Response {
 class AccountsService extends Xhr {
   constructor() {
     super();
-    this.modelPath = "/statistic";
+    this.modelPath = "/accounts";
   }
 
   addAccount(body: AccountParams) {
     return this.http<Response>({
       method: "post",
-      url: "/accounts",
+      url: "/",
       body
     });
   }
