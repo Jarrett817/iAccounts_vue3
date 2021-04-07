@@ -158,13 +158,6 @@
       "font_class": "investment",
       "unicode": "e784",
       "unicode_decimal": 59268
-    },
-    {
-      "icon_id": "17990866",
-      "name": "日期",
-      "font_class": "date",
-      "unicode": "e609",
-      "unicode_decimal": 58889
     }
   ]
 }

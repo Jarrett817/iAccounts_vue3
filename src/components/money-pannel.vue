@@ -4,15 +4,18 @@
       <van-tab v-for="tab in ['支出', '收入']" :title="tab" :key="tab"></van-tab>
     </van-tabs>
     <div class="icon-list"></div>
-    <div class="note-wrap">
-      <van-field v-model="result.note" label="备注" placeholder="点击写备注" />
-    </div>
-    <div class="date-value-wrap">
-      <van-button size="large" icon="src/assets/svg/date.svg" @click="handleClick">
-        {{ buttonText }}
-      </van-button>
-      <div class="keyboard-value">{{ result.value || 0 }}</div>
-    </div>
+    <section>
+      <div class="note-wrap">
+        <svg-icon class="icon-edit" name="edit"></svg-icon>
+        <van-field v-model="result.note" left-icon="winning" placeholder="点击写备注" />
+      </div>
+      <div class="date-value-wrap">
+        <van-button size="large" icon="src/assets/svg/calendar.svg" @click="handleClick">
+          {{ buttonText }}
+        </van-button>
+        <div class="keyboard-value">{{ result.value || 0 }}</div>
+      </div>
+    </section>
     <transition name="fade">
       <keep-alive>
         <van-number-keyboard
@@ -145,39 +148,44 @@ export default defineComponent({
   width: 100%;
   overflow: auto;
 }
-.van-field {
-  font-size: 16px;
-}
-.date-value-wrap {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
+section {
   padding: 0 16px;
-
-  .keyboard-value {
-    text-align: right;
-    flex: 1;
-    line-height: 24px;
-    font-size: 24px;
+  .note-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    .van-field {
+      font-size: 16px;
+      padding: 0;
+    }
+    .icon-edit {
+      width: 0.9em;
+      height: 0.9em;
+    }
   }
-  .van-button {
-    border: none;
-    width: fit-content;
+  .date-value-wrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+
+    .keyboard-value {
+      text-align: right;
+      flex: 1;
+      line-height: 24px;
+      font-size: 24px;
+    }
+    .van-button {
+      border: none;
+      width: fit-content;
+    }
   }
 }
+
 .date-picker {
   height: 222px;
 }
-.note-wrap {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .icon-note {
-    font-size: 18px;
-    margin-left: 18px;
-  }
-}
+
 .van-number-keyboard {
   position: static;
   padding-bottom: 0;

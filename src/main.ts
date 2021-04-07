@@ -6,8 +6,7 @@ import "amfe-flexible";
 import "@/assets/style/index.scss";
 import { router } from "@/router";
 import { store } from "@/store";
-import "@/assets/iconfont-svg/iconfont.js";
-
+import "@/assets/tags-icon-svg/iconfont";
 const app = createApp(App);
 app.use(router);
 app.use(store);
