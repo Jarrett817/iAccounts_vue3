@@ -2,7 +2,19 @@ import { Xhr } from "./xhr";
 interface Response {
   expend: number;
   income: number;
-  detail: any[];
+  detail: {
+    id: number;
+    name: string;
+    type: "expend" | "income";
+    value: number;
+    desc: string;
+    tag: {
+      id: number;
+      name: string;
+      icon: string;
+    };
+    createTime: number;
+  }[];
 }
 class StatisticService extends Xhr {
   constructor() {

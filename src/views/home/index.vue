@@ -112,13 +112,14 @@ export default defineComponent({
 <style lang="scss" scoped>
 .home-main-wrap {
   height: 100%;
-
+  display: flex;
+  flex-direction: column;
   .van-datetime-picker {
     height: 50px;
   }
   .list-wrap {
     overflow: auto;
-    height: 100%;
+    flex: 1;
   }
 }
 </style>

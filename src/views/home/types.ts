@@ -1,10 +1,15 @@
 interface ListItem {
-  createTime: number;
+  id: number;
   name: string;
-  type: string;
+  type: "expend" | "income";
   value: number;
-  tag: number[];
   desc: string;
+  tag: {
+    id: number;
+    name: string;
+    icon: string;
+  };
+  createTime: number;
 }
 
 export { ListItem };
