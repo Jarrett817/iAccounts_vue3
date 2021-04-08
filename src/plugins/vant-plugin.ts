@@ -15,7 +15,8 @@ import {
   NumberKeyboard,
   Calendar,
   Field,
-  Button
+  Button,
+  Divider
 } from "vant";
 import { App } from "vue";
 const componentArray = [
@@ -35,7 +36,8 @@ const componentArray = [
   NumberKeyboard,
   Calendar,
   Field,
-  Button
+  Button,
+  Divider
 ];
 export const vantPlugin = {
   install: (app: App) => {

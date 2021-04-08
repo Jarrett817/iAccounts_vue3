@@ -3,7 +3,15 @@
     <van-tabs @click="handleTabsClick">
       <van-tab v-for="tab in ['支出', '收入']" :title="tab" :key="tab"></van-tab>
     </van-tabs>
-    <div class="icon-list"></div>
+    <div class="icon-list">
+      <div @click="onIconClick" v-for="item in iconList" :key="item.name">
+        <div class="icon-name-wrap">
+          <svg-icon :class="['tag-icon', item.selected ? 'selected' : '']" :name="item.icon" />
+          <span>{{ item.name }}</span>
+        </div>
+      </div>
+    </div>
+    <van-divider />
     <section>
       <div class="note-wrap">
         <svg-icon class="icon-edit" name="edit"></svg-icon>
@@ -46,13 +54,14 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, ref } from "vue";
 import DatePicker from "@/components/date-picker.vue";
-import { accountsService } from "@/services/";
+import { accountsService, tagService } from "@/services/";
 import dayjs from "dayjs";
 interface Result {
   date: number;
   value: string;
   type: string;
   note: string;
+  tagId: number | null;
 }
 export default defineComponent({
   components: { DatePicker },
@@ -66,16 +75,19 @@ export default defineComponent({
   setup(props, context) {
     const activeColor = ref("#4ca2f8");
     const moneyPannelVisible = ref<boolean>(false);
-    let result = reactive<Result>({
+    const result = reactive<Result>({
       date: dayjs().valueOf(),
       value: "",
       type: "expend",
-      note: ""
+      note: "",
+      tagId: null
     });
-
+    const iconList = ref<{ id: number; icon: string; name: string; selected?: boolean }[]>([]);
     const datePickerShow = ref(false);
+    tagService.getTags({ type: result.type }).then(res => {
+      iconList.value = res;
+    });
     const handleTabsClick = (index: number) => {
-      console.log(index);
       const types = ["expend", "income"];
       result.type = types[index];
       if (index) {
@@ -118,8 +130,29 @@ export default defineComponent({
         result.value = "";
       }, 500);
     };
+    const onIconClick = (event: MouseEvent) => {
+      const el = event.currentTarget as HTMLDivElement;
+      el!.children[0].children[0].classList.add("selected");
+      const targetName = (el!.children[0].children[1] as HTMLSpanElement).innerText;
+      iconList.value.forEach(item => {
+        if (item.name === targetName) {
+          if (item.selected) {
+            item.selected = false;
+            return;
+          }
+          item.selected = true;
+        } else {
+          if (!item.selected) return;
+          else item.selected = false;
+        }
+        if (item.selected) {
+          result.tagId = item.id;
+        }
+      });
+    };
 
     return {
+      iconList,
       onClose,
       datePickerShow,
       handleClick,
@@ -129,6 +162,7 @@ export default defineComponent({
       handleTabsClick,
       moneyPannelVisible,
       handleShow,
+      onIconClick,
       activeColor
     };
   }
@@ -142,11 +176,37 @@ export default defineComponent({
 .van-popup {
   background-color: #f2f3f5;
 }
-
+.van-divider {
+  margin: 1px 0;
+}
 .icon-list {
-  height: 2em;
-  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: flex-start;
+  align-items: center;
+  height: 56px;
   overflow: auto;
+  white-space: nowrap;
+  padding: 0 16px;
+  margin: 6px 0;
+  .icon-name-wrap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 16px;
+  }
+  .tag-icon {
+    font-size: 24px;
+    margin-bottom: 4px;
+    &.selected {
+      transform: scale(1.5);
+    }
+  }
+  span {
+    font-size: 8px;
+  }
 }
 section {
   padding: 0 16px;

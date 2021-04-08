@@ -1,19 +1,18 @@
 import { Xhr } from "./xhr";
 interface Response {
-  expend: number;
-  income: number;
-  detail: any[];
+  id: number;
+  name: string;
+  icon: string;
 }
 class TagService extends Xhr {
   constructor() {
     super();
-    this.modelPath = "/statistic";
+    this.modelPath = "/tag";
   }
-
-  getBalanceByTimeSlot(params: object) {
-    return this.http<Response>({
+  getTags(params?: { type: string }) {
+    return this.http<Response[]>({
       method: "get",
-      url: "/balance",
+      url: "/list",
       params
     });
   }
