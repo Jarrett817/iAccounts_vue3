@@ -34,7 +34,8 @@
     "src/views/components/money-pannel.vue",
     "src/views/components/i-tabbar.vue",
     "src/components/money-pannel.vue",
-    "src/components/i-tabbar.vue"
+    "src/components/i-tabbar.vue",
+    "src/views/edit/tag.vue"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

@@ -1,8 +1,6 @@
 <template>
   <van-popup v-model:show="handleShow" position="bottom" get-container="body">
-    <van-tabs @click="handleTabsClick">
-      <van-tab v-for="tab in ['支出', '收入']" :title="tab" :key="tab"></van-tab>
-    </van-tabs>
+    <balance-tab v-model:active="activeIndex"></balance-tab>
     <div class="icon-list">
       <div @click="onIconClick" v-for="item in iconList" :key="item.name">
         <div class="icon-name-wrap">
@@ -52,14 +50,16 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref } from "vue";
+import { computed, defineComponent, reactive, ref, watchEffect } from "vue";
 import DatePicker from "@/components/date-picker.vue";
 import { accountsService, tagService } from "@/services/";
 import dayjs from "dayjs";
+
+type BalanceType = "expend" | "income";
 interface Result {
   date: number;
   value: string;
-  type: string;
+  type: BalanceType;
   note: string;
   tagId: number | null;
 }
@@ -73,7 +73,7 @@ export default defineComponent({
   },
   emits: ["update:show"],
   setup(props, context) {
-    const activeColor = ref("#4ca2f8");
+    const activeIndex = ref(0);
     const moneyPannelVisible = ref<boolean>(false);
     const result = reactive<Result>({
       date: dayjs().valueOf(),
@@ -87,15 +87,10 @@ export default defineComponent({
     tagService.getTags({ type: result.type }).then(res => {
       iconList.value = res;
     });
-    const handleTabsClick = (index: number) => {
+    watchEffect(() => {
       const types = ["expend", "income"];
-      result.type = types[index];
-      if (index) {
-        activeColor.value = "#e67e81";
-      } else {
-        activeColor.value = "#4ca2f8";
-      }
-    };
+      result.type = types[activeIndex.value] as BalanceType;
+    });
     const handleShow = computed({
       get() {
         return props.show;
@@ -159,20 +154,16 @@ export default defineComponent({
       buttonText,
       handleDateConfirm,
       result,
-      handleTabsClick,
       moneyPannelVisible,
       handleShow,
       onIconClick,
-      activeColor
+      activeIndex
     };
   }
 });
 </script>
 
 <style lang="scss" scoped>
-::v-deep(.van-tabs__line) {
-  background-color: v-bind(activeColor);
-}
 .van-popup {
   background-color: #f2f3f5;
 }

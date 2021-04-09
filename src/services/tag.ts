@@ -9,7 +9,7 @@ class TagService extends Xhr {
     super();
     this.modelPath = "/tag";
   }
-  getTags(params?: { type: string }) {
+  getTags(params?: { type: "expend" | "income" }) {
     return this.http<Response[]>({
       method: "get",
       url: "/list",

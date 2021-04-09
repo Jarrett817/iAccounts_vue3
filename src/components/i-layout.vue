@@ -29,6 +29,7 @@ export default defineComponent({ name: "iLayout", setup() {} });
     flex-shrink: 0;
   }
   footer {
+    flex: 0 0 51px;
     flex-shrink: 0;
   }
 }

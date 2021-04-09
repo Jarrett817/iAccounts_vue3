@@ -3,12 +3,12 @@
     <ul v-for="(group, index) in result" :key="index">
       <p>
         <span>{{ groupTime(group[0].createTime) }}</span>
-        <span>{{ dailyBalance(group) }}</span>
+        <span v-html="dailyBalance(group)"></span>
       </p>
 
       <van-divider />
       <li v-for="(item, index) in group" :key="item.createTime">
-        <router-link :to="`/tags/${item.id}`">
+        <router-link :to="`/billList/edit/${item.id}`">
           <div class="bill-item">
             <div class="icon-title-wrap">
               <svg-icon :name="item.tag.icon"></svg-icon>
@@ -43,6 +43,8 @@ export default defineComponent({
     let groups: GroupData = {};
     let result = ref<ListItem[][]>([]);
     watchEffect(() => {
+      groups = {};
+      result.value = [];
       const _listData = props.listData;
       _listData.sort((pre: ListItem, next: ListItem) => {
         if (pre.createTime > next.createTime) return -1;
@@ -71,7 +73,7 @@ export default defineComponent({
         else income += item.value;
       });
       income ? (result += `收入：${income}`) : "";
-      if (income && expend) result += "  ";
+      if (income && expend) result += "&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp";
       expend ? (result += `支出：${expend}`) : "";
       return result;
     };
