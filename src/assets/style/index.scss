@@ -26,7 +26,10 @@ button,
 input {
   font: inherit;
 }
-
+a {
+  text-decoration: none;
+  color: inherit;
+}
 // vant ui
 .van-field {
   &__label {

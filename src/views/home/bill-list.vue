@@ -1,13 +1,23 @@
 <template>
   <div class="bill-list">
     <ul v-for="(group, index) in result" :key="index">
-      <p>{{ groupTime(group[0].createTime) }}</p>
+      <p>
+        <span>{{ groupTime(group[0].createTime) }}</span>
+        <span>{{ dailyBalance(group) }}</span>
+      </p>
+
       <van-divider />
-      <li v-for="item in group" :key="item.createTime">
-        <div class="icon-title-wrap">
-          <svg-icon :name="item.tag.icon" /> <span>{{ item.tag.name }}</span>
-        </div>
-        <span>{{ `${item.type === "expend" ? "-" : "+"}${item.value}` }}</span>
+      <li v-for="(item, index) in group" :key="item.createTime">
+        <router-link :to="`/tags/${item.id}`">
+          <div class="bill-item">
+            <div class="icon-title-wrap">
+              <svg-icon :name="item.tag.icon"></svg-icon>
+              <span>{{ item.tag.name }}</span>
+            </div>
+            <span>{{ `${item.type === "expend" ? "-" : "+"}${item.value}` }}</span>
+          </div>
+        </router-link>
+        <van-divider v-if="group[index + 1]" :style="{ padding: '4px 32px' }"></van-divider>
       </li>
     </ul>
   </div>
@@ -41,18 +51,31 @@ export default defineComponent({
       });
       // 聚合同一天的数据
       _listData.forEach(dataItem => {
-        const date = dayjs(dataItem.createTime).valueOf().toString();
+        const date = dayjs(dataItem.createTime).format("YYYYMMDD");
         groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
       });
       result.value = Object.keys(groups).map((key: string) => {
         return groups[key];
       });
     });
-    const weekDay = ["星期天", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+    const weekDay = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
     const groupTime = (time: number) => {
       return dayjs(time).format("MM月DD日") + " " + weekDay[dayjs(time).day()];
     };
-    return { result, groupTime };
+    const dailyBalance = (group: ListItem[]) => {
+      let expend = 0;
+      let income = 0;
+      let result = "";
+      group.forEach(item => {
+        if (item.type === "expend") expend += item.value;
+        else income += item.value;
+      });
+      income ? (result += `收入：${income}`) : "";
+      if (income && expend) result += "  ";
+      expend ? (result += `支出：${expend}`) : "";
+      return result;
+    };
+    return { result, groupTime, dailyBalance };
   }
 });
 </script>
@@ -65,11 +88,19 @@ export default defineComponent({
   ul {
     text-align: left;
     margin-bottom: 8px;
-    p {
+    > .van-divider {
+      width: 100vw;
+      margin-left: -16px;
+      border-color: #dcdee0;
+    }
+    > p {
       font-size: 12px;
       color: #c8c9cc;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
     }
-    li {
+    .bill-item {
       display: flex;
       flex-direction: row;
       align-items: center;
