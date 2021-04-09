@@ -16,13 +16,18 @@ interface Response {
     createTime: number;
   }[];
 }
+interface Params {
+  startTime: number;
+  endTime: number;
+  listType: number;
+}
 class StatisticService extends Xhr {
   constructor() {
     super();
     this.modelPath = "/statistic";
   }
 
-  getBalanceByTimeSlot(params: object) {
+  getBalanceByTimeSlot(params: Params) {
     return this.http<Response>({
       method: "get",
       url: "/balance",
