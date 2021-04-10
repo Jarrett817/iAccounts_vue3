@@ -1,15 +1,17 @@
 <template>
   <article class="layout">
-    <header><slot name="header" /></header>
+    <van-sticky>
+      <header><slot name="header" /></header
+    ></van-sticky>
     <main><slot name="main" /></main>
     <footer><slot name="footer" /></footer>
   </article>
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue';
+import { defineComponent } from "vue";
 
-export default defineComponent({ name: 'Layout', setup() {} });
+export default defineComponent({ name: "iLayout", setup() {} });
 </script>
 
 <style lang="scss" scoped>
@@ -17,17 +19,18 @@ export default defineComponent({ name: 'Layout', setup() {} });
   display: flex;
   flex-direction: column;
   justify-self: center;
-  height: 100%;
-  width: 100%;
-  header {
-    flex: 1 0;
-  }
+  height: 100vh;
+  width: 100vw;
   main {
-    flex: 8 0;
+    flex: 1;
+    overflow: hidden;
   }
-
+  header {
+    flex-shrink: 0;
+  }
   footer {
-    flex: 1 0;
+    flex: 0 0 51px;
+    flex-shrink: 0;
   }
 }
 </style>

@@ -26,8 +26,18 @@
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "src/components/i-layout.vue",
-    "src/components/i-tabbar.vue"
+    "src/views/components/money-pannel.vue",
+    "src/components/money-pannel.vue",
+    "src/components/money-pannel.vue",
+    "src/components/tag-list.vue",
+    "src/components/date-picker.vue",
+    "src/views/components/money-pannel.vue",
+    "src/views/components/i-tabbar.vue",
+    "src/components/money-pannel.vue",
+    "src/components/i-tabbar.vue",
+    "src/views/edit/tag.vue",
+    "src/views/components/i-edit.vue",
+    "src/views/edit/index.vue"
   ],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

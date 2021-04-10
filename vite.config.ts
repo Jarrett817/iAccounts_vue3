@@ -1,31 +1,74 @@
-import { defineConfig } from 'vite';
-import vue from '@vitejs/plugin-vue';
-import { join, resolve } from 'path';
+import { svgBuilder } from "./src/plugins/svg-plugin";
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
+import styleImport from "vite-plugin-style-import";
+import { resolve } from "path";
 // https://vitejs.dev/config/
+
+const vantConfig = {
+  libraryName: "vant",
+  esModule: true,
+  resolveStyle: name => {
+    return `vant/es/${name}/style`;
+  }
+};
+
 export default defineConfig({
-  plugins: [vue()],
-  base: './',
+  plugins: [vue(), styleImport({ libs: [vantConfig] }), svgBuilder("src/assets/svg/")],
+  base: "/",
+  server: {
+    port: 3000,
+    strictPort: true,
+    proxy: {
+      "^/iAccounts": {
+        target: "https://www.fastmock.site/mock/eff966340c7c104aca296f8e38971d9b",
+        changeOrigin: true
+      }
+    }
+  },
   resolve: {
     alias: [
       {
-        find: '@',
-        replacement: '/src',
+        find: "@",
+        replacement: "/src"
       },
       {
         find: /^~/,
-        replacement: 'node_modules/',
-      },
-    ],
+        replacement: "node_modules/"
+      }
+    ]
   },
   css: {
     preprocessorOptions: {
       less: {
         modifyVars: {
-          hack: `true; @import "${resolve(__dirname, 'src/style/vant.theme.less')}";`,
+          hack: `true; @import "${resolve(__dirname, "src/assets/style/vant.theme.less")}";`
         },
-        javascriptEnabled: true,
+        javascriptEnabled: true
       },
-      scss: {},
-    },
+      scss: {}
+    }
   },
+  build: {
+    rollupOptions: {
+      input: "index.html",
+      output: {
+        name: "iAccounts",
+        file: "iAccounts.js",
+        format: "umd"
+        // plugins: [terser()],
+      },
+      plugins: [
+        // scss({ include: /\.scss$/, sass: dartSass }),
+        // esbuild({
+        //   include: /\.[jt]s$/,
+        //   minify: process.env.NODE_ENV === 'production',
+        //   target: 'es2015',
+        // }),
+        // vue({
+        //   include: /\.vue$/,
+        // }),
+      ]
+    }
+  }
 });

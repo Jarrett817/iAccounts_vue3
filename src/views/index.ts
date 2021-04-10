@@ -1,6 +1,6 @@
-import Home from './home/index.vue';
-import Settings from './settings/index.vue';
-import Statistic from './statistic/index.vue';
-import Tags from './tags/index.vue';
-
-export { Home, Settings, Statistic, Tags };
+import Home from "./home/index.vue";
+import User from "./user/index.vue";
+import Statistic from "./statistic/index.vue";
+import Tags from "./tags/index.vue";
+import Detail from "./detail/index.vue";
+export { Home, User, Statistic, Tags, Detail };

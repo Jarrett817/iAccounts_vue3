@@ -1,0 +1,1 @@
+export { barFn } from "./bar";

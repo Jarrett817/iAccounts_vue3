@@ -1,11 +1,54 @@
-import 'vant/lib/index.less';
-import { Tabbar, TabbarItem, Icon, NavBar } from 'vant';
-import { App } from 'vue';
-const componentArray = [Tabbar, TabbarItem, Icon, NavBar];
+import {
+  CellGroup,
+  Cell,
+  Tabbar,
+  TabbarItem,
+  Icon,
+  NavBar,
+  Sticky,
+  DropdownMenu,
+  DropdownItem,
+  DatetimePicker,
+  Popup,
+  Tab,
+  Tabs,
+  NumberKeyboard,
+  Calendar,
+  Field,
+  Button,
+  Divider,
+  ActionSheet
+} from "vant";
+import { App } from "vue";
+const componentArray = [
+  CellGroup,
+  Cell,
+  Tabbar,
+  TabbarItem,
+  Icon,
+  NavBar,
+  Sticky,
+  DropdownMenu,
+  DropdownItem,
+  DatetimePicker,
+  Popup,
+  Tab,
+  Tabs,
+  NumberKeyboard,
+  Calendar,
+  Field,
+  Button,
+  Divider,
+  ActionSheet
+];
 export const vantPlugin = {
   install: (app: App) => {
-    componentArray.forEach((item) => {
-      app.component(item.name, item);
+    componentArray.forEach(item => {
+      let camelCase = "";
+      item.name.split("-").forEach(item => {
+        camelCase += item[0].toUpperCase() + item.slice(1);
+      });
+      app.component(camelCase, item);
     });
-  },
+  }
 };

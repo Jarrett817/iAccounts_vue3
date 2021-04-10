@@ -1,0 +1,58 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  &::before,
+  &::after {
+    box-sizing: border-box;
+  }
+  &:focus {
+    outline: none;
+  }
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
+}
+ul,
+ol {
+  list-style: none;
+}
+button,
+input {
+  font: inherit;
+}
+a {
+  text-decoration: none;
+  color: inherit;
+}
+// vant ui
+.van-field {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  &__label {
+    width: fit-content;
+  }
+  &__right-icon {
+    font-size: 28px;
+  }
+}
+.van-nav-bar {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  &__title {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+}
+.van-tabs__line {
+  background-color: #4ca2f8;
+}
