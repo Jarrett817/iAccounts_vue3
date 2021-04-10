@@ -1,5 +1,5 @@
 <template>
-  <van-tabs v-model:active="activeIndex">
+  <van-tabs v-model:active="activeIndex" animated>
     <van-tab v-for="tab in ['支出', '收入']" :title="tab" :key="tab"></van-tab>
   </van-tabs>
 </template>
