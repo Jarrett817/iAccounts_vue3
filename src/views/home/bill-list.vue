@@ -8,7 +8,7 @@
 
       <van-divider />
       <li v-for="(item, index) in group" :key="item.createTime">
-        <router-link :to="`/billList/edit/${item.id}`">
+        <router-link :to="`/billList/edit/${item.id}?from=/`">
           <div class="bill-item">
             <div class="icon-title-wrap">
               <svg-icon :name="item.tag.icon"></svg-icon>
@@ -26,7 +26,7 @@
 <script lang="ts">
 import { defineComponent, PropType, ref, watchEffect } from "vue";
 import dayjs from "dayjs";
-import { ListItem } from "./types";
+import { ListItem } from "../common/types";
 
 interface GroupData {
   [key: string]: ListItem[];
@@ -47,13 +47,13 @@ export default defineComponent({
       result.value = [];
       const _listData = props.listData;
       _listData.sort((pre: ListItem, next: ListItem) => {
-        if (pre.createTime > next.createTime) return -1;
-        else if (pre.createTime < next.createTime) return 1;
+        if (pre.createTime! > next.createTime!) return -1;
+        else if (pre.createTime! < next.createTime!) return 1;
         else return 0;
       });
       // 聚合同一天的数据
       _listData.forEach(dataItem => {
-        const date = dayjs(dataItem.createTime).format("YYYYMMDD");
+        const date = dayjs(dataItem.createTime!).format("YYYYMMDD");
         groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
       });
       result.value = Object.keys(groups).map((key: string) => {
@@ -61,8 +61,8 @@ export default defineComponent({
       });
     });
     const weekDay = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-    const groupTime = (time: number) => {
-      return dayjs(time).format("MM月DD日") + " " + weekDay[dayjs(time).day()];
+    const groupTime = (time: number | undefined) => {
+      return dayjs(time!).format("MM月DD日") + " " + weekDay[dayjs(time!).day()];
     };
     const dailyBalance = (group: ListItem[]) => {
       let expend = 0;

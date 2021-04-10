@@ -40,8 +40,8 @@ import DashBoard from "../components/dash-board.vue";
 import DatePicker from "@/components/date-picker.vue";
 import BillList from "./bill-list.vue";
 import { computed, defineComponent, ref, watch } from "vue";
-import { statisticService } from "@/services/";
-import { ListItem } from "./types";
+import { accountsService } from "@/services/";
+import { ListItem } from "../common/types";
 import dayjs from "dayjs";
 export default defineComponent({
   components: {
@@ -74,7 +74,7 @@ export default defineComponent({
     const getStatistic = (date: Date, listType: number) => {
       const startTime = dayjs(date).startOf("month").valueOf();
       const endTime = dayjs(date).endOf("month").valueOf();
-      statisticService.getBalanceByTimeSlot({ startTime, endTime, listType }).then(res => {
+      accountsService.getListByTimeSlot({ startTime, endTime, listType }).then(res => {
         const { expend, income, detail } = res;
         monthlyExpend.value = expend;
         monthlyIncome.value = income;

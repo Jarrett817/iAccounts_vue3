@@ -9,7 +9,7 @@
           class="single-icon"
           v-for="item in iconList"
           :key="item.id"
-          :to="`/tags/edit/${item.id}`"
+          :to="`/tags/edit/${item.id}?from=/tags`"
         >
           <svg-icon :name="item.icon"></svg-icon>
           <span>{{ item.name }}</span>

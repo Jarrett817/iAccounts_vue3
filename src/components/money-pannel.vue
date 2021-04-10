@@ -119,10 +119,14 @@ export default defineComponent({
       accountsService.addAccount({ ...result, value: Number(Number(result.value).toFixed(2)) });
       handleShow.value = false;
       setTimeout(() => {
-        result.date = dayjs().valueOf();
-        result.type = "expend";
-        result.note = "";
-        result.value = "";
+        const emptyResult = {
+          date: dayjs().valueOf(),
+          value: "",
+          type: "expend",
+          note: "",
+          tagId: null
+        };
+        Object.assign(result, emptyResult);
       }, 500);
     };
     const onIconClick = (event: MouseEvent) => {
