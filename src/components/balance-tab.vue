@@ -1,11 +1,11 @@
 <template>
-  <van-tabs v-model:active="activeIndex" @click="handleTabsClick">
+  <van-tabs v-model:active="activeIndex">
     <van-tab v-for="tab in ['支出', '收入']" :title="tab" :key="tab"></van-tab>
   </van-tabs>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { computed, defineComponent, ref, watchEffect } from "vue";
 export default defineComponent({
   components: {},
   props: {
@@ -17,15 +17,15 @@ export default defineComponent({
   emits: ["change", "update:active"],
   setup(props, ctx) {
     const activeColor = ref("#4ca2f8");
-    const handleTabsClick = (index: number) => {
-      if (index) {
+    watchEffect(() => {
+      if (props.active) {
         activeColor.value = "#e67e81";
-        ctx.emit("change", "expend");
+        ctx.emit("change", "income");
       } else {
         activeColor.value = "#4ca2f8";
-        ctx.emit("change", "income");
+        ctx.emit("change", "expend");
       }
-    };
+    });
     const activeIndex = computed({
       get() {
         return props.active;
@@ -34,7 +34,7 @@ export default defineComponent({
         ctx.emit("update:active", val);
       }
     });
-    return { handleTabsClick, activeIndex, activeColor };
+    return { activeIndex, activeColor };
   }
 });
 </script>

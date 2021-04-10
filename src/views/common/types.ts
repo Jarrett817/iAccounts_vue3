@@ -1,6 +1,5 @@
 interface ListItem {
   id: number | null;
-  name: string;
   type: "expend" | "income" | "";
   value: number;
   desc: string;

@@ -11,9 +11,9 @@
     </div>
     <van-divider />
     <section>
-      <div class="note-wrap">
+      <div class="desc-wrap">
         <svg-icon class="icon-edit" name="edit"></svg-icon>
-        <van-field v-model="result.note" left-icon="winning" placeholder="点击写备注" />
+        <van-field v-model="result.desc" left-icon="winning" placeholder="点击写备注" />
       </div>
       <div class="date-value-wrap">
         <van-button size="large" icon="src/assets/svg/calendar.svg" @click="handleClick">
@@ -60,8 +60,9 @@ interface Result {
   date: number;
   value: string;
   type: BalanceType;
-  note: string;
+  desc: string;
   tagId: number | null;
+  id?: number;
 }
 export default defineComponent({
   components: { DatePicker },
@@ -69,6 +70,10 @@ export default defineComponent({
     show: {
       type: Boolean,
       default: false
+    },
+    params: {
+      type: Object,
+      default: () => {}
     }
   },
   emits: ["update:show"],
@@ -79,10 +84,11 @@ export default defineComponent({
       date: dayjs().valueOf(),
       value: "",
       type: "expend",
-      note: "",
+      desc: "",
       tagId: null
     });
     const iconList = ref<{ id: number; icon: string; name: string; selected?: boolean }[]>([]);
+
     const datePickerShow = ref(false);
     tagService.getTags({ type: result.type }).then(res => {
       iconList.value = res;
@@ -93,6 +99,16 @@ export default defineComponent({
     });
     const handleShow = computed({
       get() {
+        // 若已有参数，打开面板时进行填充
+        if (props.params) {
+          Object.assign(result, props.params);
+          iconList.value.forEach(item => {
+            if (item.id === result.tagId) {
+              item.selected = true;
+            }
+          });
+          activeIndex.value = props.params.type === "expend" ? 0 : 1;
+        }
         return props.show;
       },
       set(val) {
@@ -116,14 +132,24 @@ export default defineComponent({
       datePickerShow.value = false;
     };
     const onClose = () => {
-      accountsService.addAccount({ ...result, value: Number(Number(result.value).toFixed(2)) });
+      if (props.params) {
+        accountsService.updateTargetAccount({
+          desc: result.desc,
+          type: result.type,
+          value: Number(result.value),
+          id: result.id as number,
+          tagId: result.tagId as number
+        });
+      } else {
+        accountsService.addAccount({ ...result, value: Number(Number(result.value).toFixed(2)) });
+      }
       handleShow.value = false;
       setTimeout(() => {
         const emptyResult = {
           date: dayjs().valueOf(),
           value: "",
           type: "expend",
-          note: "",
+          desc: "",
           tagId: null
         };
         Object.assign(result, emptyResult);
@@ -205,7 +231,7 @@ export default defineComponent({
 }
 section {
   padding: 0 16px;
-  .note-wrap {
+  .desc-wrap {
     display: flex;
     flex-direction: row;
     align-items: center;

@@ -16,7 +16,8 @@ import {
   Calendar,
   Field,
   Button,
-  Divider
+  Divider,
+  ActionSheet
 } from "vant";
 import { App } from "vue";
 const componentArray = [
@@ -37,7 +38,8 @@ const componentArray = [
   Calendar,
   Field,
   Button,
-  Divider
+  Divider,
+  ActionSheet
 ];
 export const vantPlugin = {
   install: (app: App) => {

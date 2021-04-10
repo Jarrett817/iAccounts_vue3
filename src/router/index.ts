@@ -1,13 +1,23 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import { Home, User, Statistic, Tags, Edit } from "@/views/";
+import { Home, User, Statistic, Tags, Detail } from "@/views/";
 const routes: Array<RouteRecordRaw> = [
   { path: "/", redirect: "/billList" },
-  { path: "/billList", component: Home },
-  { path: "/billList/edit/:id", component: Edit, props: route => ({ from: route.query.from }) },
+  { name: "billList", path: "/billList", component: Home },
+  {
+    name: "billList.detail",
+    path: "/billList/detail/:id",
+    component: Detail,
+    props: route => ({ id: route.query.id, from: route.query.from })
+  },
   { path: "/statistic", component: Statistic },
   { path: "/User", component: User },
-  { path: "/tags", component: Tags },
-  { path: "/tags/edit/:id", component: Edit, props: route => ({ from: route.query.from }) }
+  { name: "tags", path: "/tags", component: Tags },
+  {
+    name: "tags.detail",
+    path: "/tags/detail/:id",
+    component: Detail,
+    props: route => ({ id: route.query.id, from: route.query.from })
+  }
 ];
 export const router = createRouter({
   history: createWebHashHistory(),

@@ -8,7 +8,7 @@
 
       <van-divider />
       <li v-for="(item, index) in group" :key="item.createTime">
-        <router-link :to="`/billList/edit/${item.id}?from=/`">
+        <router-link :to="`/billList/detail/${item.id}?from=billList`">
           <div class="bill-item">
             <div class="icon-title-wrap">
               <svg-icon :name="item.tag.icon"></svg-icon>

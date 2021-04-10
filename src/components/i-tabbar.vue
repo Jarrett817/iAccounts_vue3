@@ -24,8 +24,8 @@ export default defineComponent({
     const tabList = [
       {
         icon: "wap-home-o",
-        field: "home",
-        route: "/"
+        field: "billList",
+        route: "/billList"
       },
       {
         icon: "label-o",
