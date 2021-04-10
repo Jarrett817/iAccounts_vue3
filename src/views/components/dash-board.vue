@@ -9,34 +9,34 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent } from 'vue';
-import dayjs from 'dayjs';
+import { computed, defineComponent } from "vue";
+import dayjs from "dayjs";
 export default defineComponent({
   components: {},
   props: {
     expend: {
       type: Number,
       required: true,
-      default: 0,
+      default: 0
     },
     income: {
       type: Number,
       required: true,
-      default: 0,
+      default: 0
     },
     curMonth: {
       type: Date,
       default: null,
-      required: true,
-    },
+      required: true
+    }
   },
   setup(props) {
     const month = computed(() => {
-      if (dayjs().isSame(props.curMonth, 'month')) return '当';
+      if (dayjs().isSame(props.curMonth, "month")) return "当";
       return dayjs(props.curMonth).month();
     });
     return { month };
-  },
+  }
 });
 </script>
 
@@ -45,7 +45,7 @@ export default defineComponent({
   text-align: left;
   padding: 4px 24px;
   h2 {
-    font-size: 24px;
+    font-size: 18px;
     &.expend {
       color: #4ca2f8;
     }

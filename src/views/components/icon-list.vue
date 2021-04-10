@@ -71,11 +71,16 @@ export default defineComponent({
   padding: 0 12px 12px 12px;
   display: flex;
   flex-direction: row;
-  justify-content: flex-start;
+  justify-content: space-between;
+  align-items: center;
   flex-wrap: wrap;
   height: 100%;
   width: 100%;
   overflow: auto;
+  &::after {
+    content: "";
+    flex: 1;
+  }
   .svg-icon {
     font-size: 36px;
     margin: 16px;

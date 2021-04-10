@@ -154,7 +154,9 @@ export default defineComponent({
       tagMap.icon = iconName;
       showIconList.value = false;
     };
+    const navbarTitleHeight = props.from === "tags" ? "auto" : "76px";
     return {
+      navbarTitleHeight,
       onSelected,
       showIconList,
       fieldValueFormatter,
@@ -173,7 +175,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 .van-nav-bar {
-  height: 76px;
+  height: v-bind(navbarTitleHeight);
   &__title {
     .svg-icon {
       font-size: 28px;

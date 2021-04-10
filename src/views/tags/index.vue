@@ -53,14 +53,19 @@ section {
   overflow: auto;
   display: flex;
   flex-wrap: wrap;
-  margin: 0 auto;
+  justify-content: space-between;
   height: 100%;
+  &::after {
+    content: "";
+    flex: 1;
+  }
   .single-icon {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: flex-start;
     align-items: center;
     margin: 12px;
+
     .svg-icon {
       fill: red;
       font-size: 36px;
