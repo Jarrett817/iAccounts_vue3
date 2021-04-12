@@ -37,11 +37,23 @@ class AccountsService extends Xhr {
     super();
     this.modelPath = "/accounts";
   }
-
+  getTimeSlot() {
+    return this.http<{ minDate: number; maxDate: number }>({
+      method: "get",
+      url: "/timeSlot"
+    });
+  }
   getListByTimeSlot(params: ListParams) {
     return this.http<ResponseList>({
       method: "get",
-      url: "",
+      url: "/list",
+      params
+    });
+  }
+  getListByYear(params: { year: number }) {
+    return this.http<{ month: number; expend: number; income: number }[]>({
+      method: "get",
+      url: "/monthList",
       params
     });
   }

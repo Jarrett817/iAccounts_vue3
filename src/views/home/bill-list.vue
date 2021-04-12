@@ -5,7 +5,6 @@
         <span>{{ groupTime(group[0].createTime) }}</span>
         <span v-html="dailyBalance(group)"></span>
       </p>
-
       <van-divider />
       <li v-for="(item, index) in group" :key="item.createTime">
         <router-link :to="`/billList/detail/${item.id}?from=billList`">

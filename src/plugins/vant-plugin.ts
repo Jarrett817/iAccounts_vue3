@@ -17,7 +17,11 @@ import {
   Field,
   Button,
   Divider,
-  ActionSheet
+  ActionSheet,
+  Swipe,
+  SwipeItem,
+  Empty,
+  Picker
 } from "vant";
 import { App } from "vue";
 const componentArray = [
@@ -39,7 +43,11 @@ const componentArray = [
   Field,
   Button,
   Divider,
-  ActionSheet
+  ActionSheet,
+  Swipe,
+  SwipeItem,
+  Empty,
+  Picker
 ];
 export const vantPlugin = {
   install: (app: App) => {

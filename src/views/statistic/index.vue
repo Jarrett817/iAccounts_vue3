@@ -2,11 +2,14 @@
   <i-layout>
     <template #header>
       <van-tabs v-model:active="activeIndex" animated>
-        <van-tab v-for="item in ['周报', '月报']" :title="item" :key="item"></van-tab>
+        <van-tab v-for="item in ['月报', '年报']" :title="item" :key="item"></van-tab>
       </van-tabs>
     </template>
     <template #main>
-      <div class="chart-wrap"><chart :source="data"></chart></div>
+      <section>
+        <month-module v-if="!activeIndex" :wholeTimeSlot="wholeTimeSlot"></month-module>
+        <year-module v-else :wholeTimeSlot="wholeTimeSlot"></year-module>
+      </section>
     </template>
     <template #footer>
       <i-tabbar></i-tabbar>
@@ -15,108 +18,39 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watchEffect } from "vue";
+import { defineComponent, reactive, ref } from "vue";
 import Chart from "@/views/components/chart.vue";
 import { accountsService } from "@/services";
+import DatePicker from "@/components/date-picker.vue";
+import MonthModule from "./month.vue";
+import YearModule from "./year.vue";
 export default defineComponent({
-  components: { Chart },
+  components: { Chart, DatePicker, MonthModule, YearModule },
   setup() {
     const activeIndex = ref<0 | 1>(0);
-    watchEffect(() => {
-      if (!activeIndex) {
-        //   const startTime=dayjs()
-        // accountsService.getListByTimeSlot({{ startTime, endTime, listType }});
-      } else {
-      }
+
+    const wholeTimeSlot = reactive<{ minDate: number | null; maxDate: number | null }>({
+      minDate: null,
+      maxDate: null
     });
-    const data = [
-      {
-        name: "London",
-        xAxisVal: "Jan.",
-        yAxisVal: 18.9
-      },
-      {
-        name: "London",
-        xAxisVal: "Feb.",
-        yAxisVal: 28.8
-      },
-      {
-        name: "London",
-        xAxisVal: "Mar.",
-        yAxisVal: 39.3
-      },
-      {
-        name: "London",
-        xAxisVal: "Apr.",
-        yAxisVal: 81.4
-      },
-      {
-        name: "London",
-        xAxisVal: "May.",
-        yAxisVal: 47
-      },
-      {
-        name: "London",
-        xAxisVal: "Jun.",
-        yAxisVal: 20.3
-      },
-      {
-        name: "London",
-        xAxisVal: "Jul.",
-        yAxisVal: 24
-      },
-      {
-        name: "London",
-        xAxisVal: "Aug.",
-        yAxisVal: 35.6
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "Jan.",
-        yAxisVal: 12.4
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "Feb.",
-        yAxisVal: 23.2
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "Mar.",
-        yAxisVal: 34.5
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "Apr.",
-        yAxisVal: 99.7
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "May.",
-        yAxisVal: 52.6
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "Jun.",
-        yAxisVal: 35.5
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "Jul.",
-        yAxisVal: 37.4
-      },
-      {
-        name: "Berlin",
-        xAxisVal: "Aug.",
-        yAxisVal: 42.4
-      }
-    ];
+    accountsService.getTimeSlot().then(res => {
+      wholeTimeSlot.minDate = res.minDate;
+      wholeTimeSlot.maxDate = res.maxDate;
+    });
+
+    const onWeekChange = (index: number) => {};
     return {
+      wholeTimeSlot,
       activeIndex,
-      data
+      onWeekChange
     };
   }
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+section {
+  overflow: auto;
+  height: 100%;
+}
+</style>
