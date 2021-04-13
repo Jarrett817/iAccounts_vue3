@@ -21,7 +21,8 @@ import {
   Swipe,
   SwipeItem,
   Empty,
-  Picker
+  Picker,
+  Form
 } from "vant";
 import { App } from "vue";
 const componentArray = [
@@ -47,7 +48,8 @@ const componentArray = [
   Swipe,
   SwipeItem,
   Empty,
-  Picker
+  Picker,
+  Form
 ];
 export const vantPlugin = {
   install: (app: App) => {

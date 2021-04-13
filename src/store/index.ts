@@ -1,17 +1,29 @@
+import { loginService } from "@/services/login";
 import { createStore } from "vuex";
 
 interface GlobalData {
-  count: number;
+  token: string | null;
 }
 const store = createStore<GlobalData>({
-  state() {
-    return {
-      userInfo: JSON.parse(sessionStorage.getItem("userInfo") || "{}")
-    };
+  state: {
+    token: null
   },
   mutations: {
-    increment(state) {
-      state.count++;
+    login: (state, data) => {
+      window.localStorage.token = data;
+      state.token = (data as unknown) as string | null;
+    },
+    logout: state => {
+      localStorage.removeItem("token");
+      state.token = null;
+    }
+  },
+  actions: {
+    loginAsync: ({ commit }, data) => {
+      return loginService.login({ id: data.id, password: data.password }).then(res => {
+        // 服务端返回一个jwt token
+        commit("login", res);
+      });
     }
   }
 });
