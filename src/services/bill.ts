@@ -10,7 +10,7 @@ interface Detail {
     name: string;
     icon: string;
   };
-  createTime: number;
+  createAt: number;
 }
 interface ResponseList {
   expend: number;
@@ -32,10 +32,10 @@ interface ResponseMsg {
   status: number;
   msg: string;
 }
-class AccountsService extends Xhr {
+class BillService extends Xhr {
   constructor() {
     super();
-    this.modelPath = "/accounts";
+    this.modelPath = "/bills";
   }
   getTimeSlot() {
     return this.http<{ minDate: number; maxDate: number }>({
@@ -57,7 +57,7 @@ class AccountsService extends Xhr {
       params
     });
   }
-  addAccount(body: AddParams) {
+  addBill(body: AddParams) {
     return this.http<ResponseMsg>({
       method: "post",
       url: "/",
@@ -72,13 +72,7 @@ class AccountsService extends Xhr {
       params
     });
   }
-  updateTargetAccount(body: {
-    id: number;
-    type: string;
-    value: number;
-    desc: string;
-    tagId: number;
-  }) {
+  updateTargetBill(body: { id: number; type: string; value: number; desc: string; tagId: number }) {
     return this.http<ResponseMsg>({
       method: "put",
       url: "/detail",
@@ -86,7 +80,7 @@ class AccountsService extends Xhr {
     });
   }
 
-  deleteTargetAccount(body: { id: number }) {
+  deleteTargetBill(body: { id: number }) {
     return this.http<ResponseMsg>({
       method: "delete",
       url: "",
@@ -95,4 +89,4 @@ class AccountsService extends Xhr {
   }
 }
 
-export const accountsService = new AccountsService();
+export const billService = new BillService();

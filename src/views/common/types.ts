@@ -1,6 +1,6 @@
 interface ListItem {
   id: number | null;
-  type: "expend" | "income";
+  type: "expend" | "income" | "";
   value: number;
   desc: string;
   tag: {
@@ -8,7 +8,7 @@ interface ListItem {
     name: string;
     icon: string;
   };
-  createTime: number | undefined;
+  createAt: number | undefined;
 }
 interface MonthlyBillItem {
   expend: number;

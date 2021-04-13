@@ -2,11 +2,11 @@
   <div class="bill-list">
     <ul v-for="(group, index) in result" :key="index">
       <p>
-        <span>{{ groupTime(group[0].createTime) }}</span>
+        <span>{{ groupTime(group[0].createAt) }}</span>
         <span v-html="dailyBalance(group)"></span>
       </p>
       <van-divider />
-      <li v-for="(item, index) in group" :key="item.createTime">
+      <li v-for="(item, index) in group" :key="item.createAt">
         <router-link :to="`/billList/detail/${item.id}?from=billList`">
           <div class="bill-item">
             <div class="icon-title-wrap">
@@ -46,13 +46,13 @@ export default defineComponent({
       result.value = [];
       const _listData = props.listData;
       _listData.sort((pre: ListItem, next: ListItem) => {
-        if (pre.createTime! > next.createTime!) return -1;
-        else if (pre.createTime! < next.createTime!) return 1;
+        if (pre.createAt! > next.createAt!) return -1;
+        else if (pre.createAt! < next.createAt!) return 1;
         else return 0;
       });
       // 聚合同一天的数据
       _listData.forEach(dataItem => {
-        const date = dayjs(dataItem.createTime!).format("YYYYMMDD");
+        const date = dayjs(dataItem.createAt!).format("YYYYMMDD");
         groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
       });
       result.value = Object.keys(groups).map((key: string) => {

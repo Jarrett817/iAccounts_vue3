@@ -20,7 +20,7 @@
 <script lang="ts">
 import { defineComponent, reactive, ref } from "vue";
 import Chart from "@/views/components/chart.vue";
-import { accountsService } from "@/services";
+import { billService } from "@/services";
 import DatePicker from "@/components/date-picker.vue";
 import MonthModule from "./month.vue";
 import YearModule from "./year.vue";
@@ -33,7 +33,7 @@ export default defineComponent({
       minDate: null,
       maxDate: null
     });
-    accountsService.getTimeSlot().then(res => {
+    billService.getTimeSlot().then(res => {
       wholeTimeSlot.minDate = res.minDate;
       wholeTimeSlot.maxDate = res.maxDate;
     });

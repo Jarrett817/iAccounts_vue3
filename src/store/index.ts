@@ -1,4 +1,4 @@
-import { createStore } from 'vuex';
+import { createStore } from "vuex";
 
 interface GlobalData {
   count: number;
@@ -6,14 +6,14 @@ interface GlobalData {
 const store = createStore<GlobalData>({
   state() {
     return {
-      count: 0,
+      userInfo: JSON.parse(sessionStorage.getItem("userInfo") || "{}")
     };
   },
   mutations: {
     increment(state) {
       state.count++;
-    },
-  },
+    }
+  }
 });
 
 export { store };

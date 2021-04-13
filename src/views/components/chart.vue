@@ -31,7 +31,7 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const canvasId = `chart${dayjs().valueOf()}`;
+    const canvasId = `chart${dayjs().valueOf() + Math.random() * 1000}`;
     const fns: { [key: string]: Function } = {
       bar: barFn,
       ring: ringFn,

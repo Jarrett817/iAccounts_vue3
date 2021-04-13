@@ -13,7 +13,12 @@
     <section>
       <div class="desc-wrap">
         <svg-icon class="icon-edit" name="edit"></svg-icon>
-        <van-field v-model="result.desc" left-icon="winning" placeholder="点击写备注" />
+        <van-field
+          v-model="result.desc"
+          left-icon="winning"
+          placeholder="点击写备注"
+          maxlength="60"
+        />
       </div>
       <div class="date-value-wrap">
         <van-button size="large" icon="src/assets/svg/calendar.svg" @click="handleClick">
@@ -52,7 +57,7 @@
 <script lang="ts">
 import { computed, defineComponent, reactive, ref, watchEffect } from "vue";
 import DatePicker from "@/components/date-picker.vue";
-import { accountsService, tagService } from "@/services/";
+import { billService, tagService } from "@/services/";
 import dayjs from "dayjs";
 
 type BalanceType = "expend" | "income";
@@ -133,7 +138,7 @@ export default defineComponent({
     };
     const onClose = () => {
       if (props.params) {
-        accountsService.updateTargetAccount({
+        billService.updateTargetBill({
           desc: result.desc,
           type: result.type,
           value: Number(result.value),
@@ -141,7 +146,7 @@ export default defineComponent({
           tagId: result.tagId as number
         });
       } else {
-        accountsService.addAccount({ ...result, value: Number(Number(result.value).toFixed(2)) });
+        billService.addBill({ ...result, value: Number(Number(result.value).toFixed(2)) });
       }
       handleShow.value = false;
       setTimeout(() => {

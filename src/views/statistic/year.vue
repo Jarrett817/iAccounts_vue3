@@ -12,7 +12,7 @@
 import { computed, defineComponent, Ref, ref, watch } from "vue";
 import dayjs from "dayjs";
 import Chart from "@/views/components/chart.vue";
-import { accountsService } from "@/services";
+import { billService } from "@/services";
 import DatePicker from "@/components/date-picker.vue";
 import { CommonDataItem } from "../common/types";
 
@@ -96,7 +96,7 @@ export default defineComponent({
     watch(
       activeIndex,
       () => {
-        accountsService
+        billService
           .getListByYear({
             year: dayjs(((monthList as unknown) as [])[activeIndex.value]).valueOf()
           })

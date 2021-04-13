@@ -11,7 +11,7 @@ interface ResponseMsg {
 class TagService extends Xhr {
   constructor() {
     super();
-    this.modelPath = "/tag";
+    this.modelPath = "/tags";
   }
   getTags(params?: { type: "expend" | "income" }) {
     return this.http<Response[]>({

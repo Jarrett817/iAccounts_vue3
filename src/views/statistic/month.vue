@@ -21,7 +21,7 @@
 import { computed, watch, defineComponent, ref, watchEffect } from "vue";
 import dayjs from "dayjs";
 import Chart from "@/views/components/chart.vue";
-import { accountsService } from "@/services";
+import { billService } from "@/services";
 import { CommonDataItem, ListItem } from "../common/types";
 import DatePicker from "@/components/date-picker.vue";
 
@@ -43,7 +43,7 @@ export default defineComponent({
     const renderByDatePicker = () => {
       const startTime = dayjs(timeValue.value).startOf("month").valueOf();
       const endTime = dayjs(timeValue.value).endOf("month").valueOf();
-      accountsService.getListByTimeSlot({ startTime, endTime, listType: 0 }).then(res => {
+      billService.getListByTimeSlot({ startTime, endTime, listType: 0 }).then(res => {
         barDataFormatter(res.detail);
         ringDataFormatter(res.detail);
       });
@@ -52,20 +52,21 @@ export default defineComponent({
     watch(ringActiveIndex, () => {
       const startTime = dayjs(timeValue.value).startOf("month").valueOf();
       const endTime = dayjs(timeValue.value).endOf("month").valueOf();
-      accountsService.getListByTimeSlot({ startTime, endTime, listType: 0 }).then(res => {
+      billService.getListByTimeSlot({ startTime, endTime, listType: 0 }).then(res => {
         ringDataFormatter(res.detail);
       });
     });
     const barDataFormatter = (data: ListItem[]) => {
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
-        return dayjs(item.createTime).month() === dayjs(timeValue.value).month();
+        return dayjs(item.createAt).month() === dayjs(timeValue.value).month();
       });
       curMonthDataList.sort((pre: ListItem, next: ListItem) => {
-        if (pre.createTime! > next.createTime!) {
+        if (pre.createAt! > next.createAt!) {
           return -1;
-        } else if (pre.createTime! < next.createTime!) {
+        } else if (pre.createAt! < next.createAt!) {
           return 1;
         } else {
+          ``;
           return 0;
         }
       });
@@ -74,7 +75,7 @@ export default defineComponent({
       barSource.value = curMonthDataList.map((item: ListItem) => {
         return {
           name: item.type === "expend" ? "支出" : "收入",
-          xAxisVal: dayjs(item.createTime).format("MM-DD"),
+          xAxisVal: dayjs(item.createAt).format("MM-DD"),
           yAxisVal: item.value
         };
       });
@@ -83,7 +84,7 @@ export default defineComponent({
       const activeType = ringActiveIndex.value ? "income" : "expend";
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
         return (
-          dayjs(item.createTime).month() === dayjs(timeValue.value).month() &&
+          dayjs(item.createAt).month() === dayjs(timeValue.value).month() &&
           item.type === activeType
         );
       });
@@ -121,6 +122,5 @@ export default defineComponent({
   border: 1px solid #ebedf0;
   margin: 12px 14px;
   border-radius: 8px;
-
 }
 </style>

@@ -1,2 +1,2 @@
 export { tagService } from "./tag";
-export { accountsService } from "./accounts";
+export { billService } from "./bill";
