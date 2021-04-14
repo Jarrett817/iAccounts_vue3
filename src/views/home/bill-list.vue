@@ -1,5 +1,5 @@
 <template>
-  <div class="bill-list">
+  <div class="bill-list" v-if="result?.length">
     <ul v-for="(group, index) in result" :key="index">
       <p>
         <span>{{ groupTime(group[0].createAt) }}</span>
@@ -20,6 +20,13 @@
       </li>
     </ul>
   </div>
+  <template v-else>
+    <van-empty
+      class="custom-image"
+      image="src/assets/emptyStatus/noBills.png"
+      description="一笔流水都没有，快去记一笔把"
+    />
+  </template>
 </template>
 
 <script lang="ts">

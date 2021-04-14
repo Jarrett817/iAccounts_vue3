@@ -23,8 +23,9 @@ const store = createStore<GlobalData>({
     loginAsync: ({ commit }, data) => {
       return loginService.login({ id: data.id, password: data.password }).then(res => {
         // 服务端返回一个jwt token
-        if (res.status === 0 && res.token) {
-          commit("login", res);
+        console.log(res);
+        if (res.token) {
+          commit("login", res.token);
         }
       });
     },

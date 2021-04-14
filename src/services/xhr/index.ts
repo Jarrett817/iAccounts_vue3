@@ -4,12 +4,12 @@ import { Notify } from "vant";
 import { router } from "@/router";
 import { store } from "@/store";
 type DialogType = "success" | "primary" | "danger" | "warning";
+const keyArray: DialogType[] = ["success", "primary", "danger", "warning"];
 axios.interceptors.response.use(response => {
-  const { result, data, msg = "请求失败" } = response?.data || {};
+  const { result, data, msg = "请求失败", error } = response?.data || {};
   if (result && result !== 0) {
-    return Promise.reject(msg);
+    Notify({ type: "danger", message: error });
   } else if (result === 0) {
-    const keyArray: DialogType[] = ["success", "primary", "danger", "warning"];
     if (data.msg) {
       Notify({ type: keyArray[data.status], message: data.msg });
     }
@@ -27,7 +27,7 @@ axios.defaults.timeout = 5000;
 axios.interceptors.request.use(
   config => {
     if (store.state.token) {
-      config.headers.Authorization = `token ${store.state.token}`;
+      config.headers.Authorization = `Bearer ${store.state.token}`;
     }
     return config;
   },

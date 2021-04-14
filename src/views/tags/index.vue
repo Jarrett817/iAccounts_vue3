@@ -4,7 +4,7 @@
       <balance-tab v-model:active="activeIndex"></balance-tab>
     </template>
     <template v-slot:main>
-      <section>
+      <section v-if="iconList?.length">
         <router-link
           class="single-icon"
           v-for="item in iconList"
@@ -15,6 +15,12 @@
           <span>{{ item.name }}</span>
         </router-link>
       </section>
+      <van-empty
+        v-else
+        class="custom-image"
+        image="src/assets/emptyStatus/noTags.png"
+        description="一个标签都没有，赶快添加一个吧~"
+      />
     </template>
     <template v-slot:footer>
       <i-tabbar></i-tabbar>
