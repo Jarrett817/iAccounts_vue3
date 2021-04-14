@@ -41,7 +41,7 @@
         />
         <div style="margin: 16px">
           <van-button round block type="primary" native-type="submit">
-            {{ type === "register" ? "注册" : "提交" }}
+            {{ type === "register" ? "注册" : "登录" }}
           </van-button>
         </div>
         <p v-if="type !== 'register'">
@@ -67,7 +67,7 @@ export default defineComponent({
       default: ""
     }
   },
-  setup() {
+  setup(props) {
     const userInfo = reactive({
       id: "",
       password: ""
@@ -75,11 +75,15 @@ export default defineComponent({
     const store = useStore();
     const router = useRouter();
     const onSubmit = async (values: { id: string; password: string }) => {
-      await store.dispatch("loginAsync", values);
-      if (store.state.token) {
-        router.push({
-          path: "/"
-        });
+      if (props.type === "register") {
+        await store.dispatch("registerAsync", values);
+      } else {
+        await store.dispatch("loginAsync", values);
+        if (store.state.token) {
+          router.push({
+            path: "/"
+          });
+        }
       }
     };
     return { userInfo, onSubmit };
@@ -144,6 +148,7 @@ export default defineComponent({
     margin-bottom: 12px;
     a {
       text-decoration: underline;
+      color: #155bd4;
     }
   }
 }

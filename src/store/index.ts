@@ -1,6 +1,7 @@
 import { loginService } from "@/services/login";
 import { createStore } from "vuex";
-
+import { Notify } from "vant";
+import { router } from "@/router";
 interface GlobalData {
   token: string | null;
 }
@@ -22,7 +23,18 @@ const store = createStore<GlobalData>({
     loginAsync: ({ commit }, data) => {
       return loginService.login({ id: data.id, password: data.password }).then(res => {
         // 服务端返回一个jwt token
-        commit("login", res);
+        if (res.status === 0 && res.token) {
+          commit("login", res);
+        }
+      });
+    },
+    registerAsync: ({ commit }, data) => {
+      return loginService.register({ id: data.id, password: data.password }).then(res => {
+        // 服务端返回一个jwt token
+        if (res.status === 0) {
+          Notify({ type: "success", message: res.msg });
+          router.push({ name: "login" });
+        }
       });
     }
   }

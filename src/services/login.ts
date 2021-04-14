@@ -6,9 +6,16 @@ class LoginService extends Xhr {
     this.modelPath = "/login";
   }
   login(body: { id: string; password: string }) {
-    return this.http<{ status: number; msg: string }>({
+    return this.http<{ status: number; msg: string; token?: string }>({
       method: "post",
       url: "",
+      body
+    });
+  }
+  register(body: { id: string; password: string }) {
+    return this.http<{ status: number; msg: string }>({
+      method: "post",
+      url: "/register",
       body
     });
   }
