@@ -17,7 +17,7 @@ export default defineComponent({
   components: {},
   props: {
     timeValue: {
-      type: Date,
+      type: String,
       default: null
     },
     type: {
@@ -36,8 +36,8 @@ export default defineComponent({
   emits: ["update:time-value", "date-confirm"],
   setup(props, context) {
     const currentDate = computed({
-      get: (): Date => props.timeValue,
-      set: (val: Date) => {
+      get: (): string => props.timeValue,
+      set: (val: string) => {
         context.emit("update:time-value", val);
       }
     });

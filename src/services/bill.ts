@@ -1,7 +1,6 @@
 import { Xhr } from "./xhr";
 interface Detail {
   id: number;
-  name: string;
   type: "expend" | "income";
   value: number;
   desc: string;
@@ -12,10 +11,9 @@ interface Detail {
   };
   createAt: number;
 }
-interface ResponseList {
+interface Balance {
   expend: number;
   income: number;
-  detail: Detail[];
 }
 interface ListParams {
   startTime: number;
@@ -44,9 +42,16 @@ class BillService extends Xhr {
     });
   }
   getListByTimeSlot(params: ListParams) {
-    return this.http<ResponseList>({
+    return this.http<Detail[]>({
       method: "get",
       url: "/list",
+      params
+    });
+  }
+  getBalanceByTimeSlot(params: { startTime: number; endTime: number }) {
+    return this.http<Balance>({
+      method: "get",
+      url: "/balance",
       params
     });
   }
@@ -60,7 +65,7 @@ class BillService extends Xhr {
   addBill(body: AddParams) {
     return this.http<ResponseMsg>({
       method: "post",
-      url: "/",
+      url: "",
       body
     });
   }

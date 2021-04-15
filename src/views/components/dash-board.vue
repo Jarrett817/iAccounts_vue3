@@ -33,7 +33,7 @@ export default defineComponent({
   setup(props) {
     const month = computed(() => {
       if (dayjs().isSame(props.curMonth, "month")) return "当";
-      return dayjs(props.curMonth).month();
+      return dayjs(props.curMonth).month() + 1;
     });
     return { month };
   }

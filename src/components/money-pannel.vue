@@ -3,7 +3,7 @@
     <balance-tab v-model:active="activeIndex"></balance-tab>
     <div class="icon-list">
       <div @click="onIconClick" v-for="item in iconList" :key="item.name">
-        <div class="icon-name-wrap">
+        <div class="icon-name-wrap" :key="item.name">
           <svg-icon :class="['tag-icon', item.selected ? 'selected' : '']" :name="item.icon" />
           <span>{{ item.name }}</span>
         </div>
@@ -95,18 +95,19 @@ export default defineComponent({
     const iconList = ref<{ id: number; icon: string; name: string; selected?: boolean }[]>([]);
 
     const datePickerShow = ref(false);
-    tagService.getTags({ type: result.type }).then(res => {
-      iconList.value = res;
-    });
+
     watchEffect(() => {
       const types = ["expend", "income"];
       result.type = types[activeIndex.value] as BalanceType;
+      tagService.getTags({ type: result.type }).then(res => {
+        iconList.value = res;
+      });
     });
     const handleShow = computed({
       get() {
         // 若已有参数，打开面板时进行填充
         if (props.params) {
-          Object.assign(result, props.params);
+          Object.assign(result, { ...props.params, value: props.params.value.toString() });
           iconList.value.forEach(item => {
             if (item.id === result.tagId) {
               item.selected = true;

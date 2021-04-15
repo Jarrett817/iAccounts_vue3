@@ -68,10 +68,12 @@ export default defineComponent({
       const startTime = dayjs(date).startOf("month").valueOf();
       const endTime = dayjs(date).endOf("month").valueOf();
       billService.getListByTimeSlot({ startTime, endTime, listType }).then(res => {
-        const { expend, income, detail } = res;
+        detailList.value = res;
+      });
+      billService.getBalanceByTimeSlot({ startTime, endTime }).then(res => {
+        const { expend, income } = res;
         monthlyExpend.value = expend;
         monthlyIncome.value = income;
-        detailList.value = detail;
       });
     };
     getStatistic(timeValue.value, curType.value);

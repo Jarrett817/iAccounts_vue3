@@ -5,7 +5,7 @@
         left-text="返回"
         :right-text="from === 'tags' ? '' : '分享'"
         left-arrow
-        :title="from === 'tags' ? '编辑标签' : ''"
+        :title="from === 'tags' ? (mode === 'add' ? '新建标签' : '编辑标签') : ''"
         @click-left="onClickLeft"
       >
         <template v-if="from !== 'tags'" #title>
@@ -78,6 +78,14 @@ export default defineComponent({
     id: {
       type: String,
       default: ""
+    },
+    type: {
+      type: String,
+      default: ""
+    },
+    mode: {
+      type: String,
+      default: ""
     }
   },
   setup(props) {
@@ -112,12 +120,12 @@ export default defineComponent({
     };
     const getTargetDetail = async (id: string) => {
       if (props.from === "tags") {
-        const result = await tagService.getTargetDetail({ id: Number(props.id) }).then(res => res);
-        Object.assign(tagMap, result);
+        if (props.mode !== "add") {
+          const result = await tagService.getTargetDetail({ id: Number(id) }).then(res => res);
+          Object.assign(tagMap, result);
+        }
       } else {
-        const result = await billService
-          .getTargetDetail({ id: Number(props.id) })
-          .then(res => res);
+        const result = await billService.getTargetDetail({ id: Number(id) }).then(res => res);
         Object.assign(billsMap, result);
       }
     };
@@ -133,7 +141,19 @@ export default defineComponent({
     getTargetDetail(props.id);
     const editClick = () => {
       if (props.from === "tags") {
-        tagService.updateTargetTag({ id: Number(props.id), name: tagMap.name, icon: tagMap.icon });
+        if (props.mode === "add") {
+          tagService.addTag({
+            name: tagMap.name,
+            icon: tagMap.icon,
+            type: props.type as "income" | "expend"
+          });
+        } else {
+          tagService.updateTargetTag({
+            id: Number(props.id),
+            name: tagMap.name,
+            icon: tagMap.icon
+          });
+        }
         router.push({ name: props.from });
       } else {
         moneyPannelVisible.value = true;

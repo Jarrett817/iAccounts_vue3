@@ -30,7 +30,7 @@ const routes: Array<RouteRecordRaw> = [
       requireAuth: true
     },
     component: () => import("@/views/detail/index.vue"),
-    props: route => ({ id: route.query.id, from: route.query.from })
+    props: route => ({ id: route.params.id, from: route.query.from })
   },
   {
     path: "/statistic",
@@ -61,7 +61,12 @@ const routes: Array<RouteRecordRaw> = [
       requireAuth: true
     },
     component: () => import("@/views/detail/index.vue"),
-    props: route => ({ id: route.query.id, from: route.query.from })
+    props: route => ({
+      id: route.params.id,
+      mode: route.query.mode,
+      type: route.query.type,
+      from: route.query.from
+    })
   }
 ];
 
