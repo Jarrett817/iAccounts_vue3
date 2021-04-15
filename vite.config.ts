@@ -21,7 +21,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       "^/iAccounts": {
-        target: "https://www.fastmock.site/mock/eff966340c7c104aca296f8e38971d9b",
+        target: "http://127.0.0.1:7001",
         changeOrigin: true
       }
     }

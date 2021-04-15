@@ -5,12 +5,12 @@
         left-text="返回"
         :right-text="from === 'tags' ? '' : '分享'"
         left-arrow
-        :title="from === 'tags' ? '编辑标签' : ''"
+        :title="from === 'tags' ? (mode === 'add' ? '新建标签' : '编辑标签') : ''"
         @click-left="onClickLeft"
       >
         <template v-if="from !== 'tags'" #title>
-          <svg-icon :name="tagMap.icon || accountsMap.tag.icon" />
-          <span>{{ tagMap.name || accountsMap.tag.name }}</span>
+          <svg-icon :name="tagMap.icon || billsMap.tag.icon" />
+          <span>{{ tagMap.name || billsMap.tag.name }}</span>
         </template>
       </van-nav-bar>
     </template>
@@ -31,10 +31,10 @@
         <van-cell-group>
           <van-field
             v-for="(value, key) in {
-              type: accountsMap.type,
-              value: accountsMap.value,
-              createTime: accountsMap.createTime,
-              desc: accountsMap.desc
+              type: billsMap.type,
+              value: billsMap.value,
+              createAt: billsMap.createAt,
+              desc: billsMap.desc
             }"
             :key="key"
             :label="keyMap[key]"
@@ -53,7 +53,7 @@
       </div>
       <money-pannel
         v-model:show="moneyPannelVisible"
-        :params="{ ...accountsMap, tagId: accountsMap.tag.id }"
+        :params="{ ...billsMap, tagId: billsMap.tag.id }"
       ></money-pannel>
     </template>
   </i-layout>
@@ -62,7 +62,7 @@
 <script lang="ts">
 import { useRouter } from "vue-router";
 import { defineComponent, reactive, ref } from "vue";
-import { accountsService, tagService } from "@/services";
+import { billService, tagService } from "@/services";
 import { ListItem } from "../common/types";
 import MoneyPannel from "@/components/money-pannel.vue";
 import IconList from "../components/icon-list.vue";
@@ -78,6 +78,14 @@ export default defineComponent({
     id: {
       type: String,
       default: ""
+    },
+    type: {
+      type: String,
+      default: ""
+    },
+    mode: {
+      type: String,
+      default: ""
     }
   },
   setup(props) {
@@ -85,14 +93,14 @@ export default defineComponent({
       value: "金额",
       type: "类型",
       desc: "备注",
-      createTime: "日期"
+      createAt: "日期"
     };
     const tagMap: {
       id: number | null;
       name: string;
       icon: string;
     } = reactive({ id: null, name: "", icon: "" });
-    const accountsMap: ListItem = reactive({
+    const billsMap: ListItem = reactive({
       id: null,
       type: "",
       value: 0,
@@ -102,7 +110,7 @@ export default defineComponent({
         name: "",
         icon: ""
       },
-      createTime: undefined
+      createAt: undefined
     });
     const moneyPannelVisible = ref(false);
     const showIconList = ref(false);
@@ -112,19 +120,19 @@ export default defineComponent({
     };
     const getTargetDetail = async (id: string) => {
       if (props.from === "tags") {
-        const result = await tagService.getTargetDetail({ id: Number(props.id) }).then(res => res);
-        Object.assign(tagMap, result);
+        if (props.mode !== "add") {
+          const result = await tagService.getTargetDetail({ id: Number(id) }).then(res => res);
+          Object.assign(tagMap, result);
+        }
       } else {
-        const result = await accountsService
-          .getTargetDetail({ id: Number(props.id) })
-          .then(res => res);
-        Object.assign(accountsMap, result);
+        const result = await billService.getTargetDetail({ id: Number(id) }).then(res => res);
+        Object.assign(billsMap, result);
       }
     };
     const fieldValueFormatter = (key: string, val: any) => {
       if (key === "type") {
         return val === "expend" ? "支出" : "收入";
-      } else if (key === "createTime") {
+      } else if (key === "createAt") {
         return dayjs(val).format("YYYY-MM-DD HH:mm:ss");
       } else {
         return val;
@@ -133,7 +141,19 @@ export default defineComponent({
     getTargetDetail(props.id);
     const editClick = () => {
       if (props.from === "tags") {
-        tagService.updateTargetTag({ id: Number(props.id), name: tagMap.name, icon: tagMap.icon });
+        if (props.mode === "add") {
+          tagService.addTag({
+            name: tagMap.name,
+            icon: tagMap.icon,
+            type: props.type as "income" | "expend"
+          });
+        } else {
+          tagService.updateTargetTag({
+            id: Number(props.id),
+            name: tagMap.name,
+            icon: tagMap.icon
+          });
+        }
         router.push({ name: props.from });
       } else {
         moneyPannelVisible.value = true;
@@ -145,7 +165,7 @@ export default defineComponent({
       })
         .then(() => {
           if (props.from === "tags") tagService.deleteTargetTag({ id: Number(props.id) });
-          else accountsService.deleteTargetAccount({ id: Number(props.id) });
+          else billService.deleteTargetBill({ id: Number(props.id) });
           router.push({ name: props.from });
         })
         .catch(() => {});
@@ -167,7 +187,7 @@ export default defineComponent({
       getTargetDetail,
       keyMap,
       tagMap,
-      accountsMap
+      billsMap
     };
   }
 });

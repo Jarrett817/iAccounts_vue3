@@ -1,14 +1,7 @@
 <template>
   <i-layout>
     <template v-slot:header>
-      <van-nav-bar title="iAccounts" @click-left="onClickLeft" @click-right="onClickRight">
-        <template #left>
-          <van-icon name="search" size="18" />
-        </template>
-        <template #right>
-          <van-icon name="setting-o" size="18" />
-        </template>
-      </van-nav-bar>
+      <van-nav-bar title="iAccounts"> </van-nav-bar>
     </template>
     <template v-slot:main>
       <div class="home-main-wrap">
@@ -40,7 +33,7 @@ import DashBoard from "../components/dash-board.vue";
 import DatePicker from "@/components/date-picker.vue";
 import BillList from "./bill-list.vue";
 import { computed, defineComponent, ref, watch } from "vue";
-import { accountsService } from "@/services/";
+import { billService } from "@/services/";
 import { ListItem } from "../common/types";
 import dayjs from "dayjs";
 export default defineComponent({
@@ -74,11 +67,13 @@ export default defineComponent({
     const getStatistic = (date: Date, listType: number) => {
       const startTime = dayjs(date).startOf("month").valueOf();
       const endTime = dayjs(date).endOf("month").valueOf();
-      accountsService.getListByTimeSlot({ startTime, endTime, listType }).then(res => {
-        const { expend, income, detail } = res;
+      billService.getListByTimeSlot({ startTime, endTime, listType }).then(res => {
+        detailList.value = res;
+      });
+      billService.getBalanceByTimeSlot({ startTime, endTime }).then(res => {
+        const { expend, income } = res;
         monthlyExpend.value = expend;
         monthlyIncome.value = income;
-        detailList.value = detail;
       });
     };
     getStatistic(timeValue.value, curType.value);

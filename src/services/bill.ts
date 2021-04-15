@@ -1,7 +1,6 @@
 import { Xhr } from "./xhr";
 interface Detail {
   id: number;
-  name: string;
   type: "expend" | "income";
   value: number;
   desc: string;
@@ -10,12 +9,11 @@ interface Detail {
     name: string;
     icon: string;
   };
-  createTime: number;
+  createAt: number;
 }
-interface ResponseList {
+interface Balance {
   expend: number;
   income: number;
-  detail: Detail[];
 }
 interface ListParams {
   startTime: number;
@@ -32,23 +30,42 @@ interface ResponseMsg {
   status: number;
   msg: string;
 }
-class AccountsService extends Xhr {
+class BillService extends Xhr {
   constructor() {
     super();
-    this.modelPath = "/accounts";
+    this.modelPath = "/bills";
   }
-
-  getListByTimeSlot(params: ListParams) {
-    return this.http<ResponseList>({
+  getTimeSlot() {
+    return this.http<{ minDate: number; maxDate: number }>({
       method: "get",
-      url: "",
+      url: "/timeSlot"
+    });
+  }
+  getListByTimeSlot(params: ListParams) {
+    return this.http<Detail[]>({
+      method: "get",
+      url: "/list",
       params
     });
   }
-  addAccount(body: AddParams) {
+  getBalanceByTimeSlot(params: { startTime: number; endTime: number }) {
+    return this.http<Balance>({
+      method: "get",
+      url: "/balance",
+      params
+    });
+  }
+  getListByYear(params: { year: number }) {
+    return this.http<{ month: number; expend: number; income: number }[]>({
+      method: "get",
+      url: "/monthList",
+      params
+    });
+  }
+  addBill(body: AddParams) {
     return this.http<ResponseMsg>({
       method: "post",
-      url: "/",
+      url: "",
       body
     });
   }
@@ -60,13 +77,7 @@ class AccountsService extends Xhr {
       params
     });
   }
-  updateTargetAccount(body: {
-    id: number;
-    type: string;
-    value: number;
-    desc: string;
-    tagId: number;
-  }) {
+  updateTargetBill(body: { id: number; type: string; value: number; desc: string; tagId: number }) {
     return this.http<ResponseMsg>({
       method: "put",
       url: "/detail",
@@ -74,7 +85,7 @@ class AccountsService extends Xhr {
     });
   }
 
-  deleteTargetAccount(body: { id: number }) {
+  deleteTargetBill(body: { id: number }) {
     return this.http<ResponseMsg>({
       method: "delete",
       url: "",
@@ -83,4 +94,4 @@ class AccountsService extends Xhr {
   }
 }
 
-export const accountsService = new AccountsService();
+export const billService = new BillService();

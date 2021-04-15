@@ -8,7 +8,17 @@ interface ListItem {
     name: string;
     icon: string;
   };
-  createTime: number | undefined;
+  createAt: number | undefined;
+}
+interface MonthlyBillItem {
+  expend: number;
+  income: number;
 }
 
-export { ListItem };
+interface CommonDataItem {
+  name: "支出" | "收入";
+  xAxisVal: string;
+  yAxisVal: number;
+}
+
+export { CommonDataItem, ListItem, MonthlyBillItem };

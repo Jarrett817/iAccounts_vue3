@@ -1,25 +1,94 @@
 import { createRouter, createWebHashHistory, RouteRecordRaw } from "vue-router";
-import { Home, User, Statistic, Tags, Detail } from "@/views/";
+import { store } from "@/store";
 const routes: Array<RouteRecordRaw> = [
-  { path: "/", redirect: "/billList" },
-  { name: "billList", path: "/billList", component: Home },
+  {
+    path: "/",
+    redirect: "/billList",
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/login/index.vue"),
+    props: true
+  },
+
+  {
+    name: "billList",
+    path: "/billList",
+    meta: {
+      requireAuth: true
+    },
+    component: () => import("@/views/home/index.vue")
+  },
   {
     name: "billList.detail",
     path: "/billList/detail/:id",
-    component: Detail,
-    props: route => ({ id: route.query.id, from: route.query.from })
+    meta: {
+      requireAuth: true
+    },
+    component: () => import("@/views/detail/index.vue"),
+    props: route => ({ id: route.params.id, from: route.query.from })
   },
-  { path: "/statistic", component: Statistic },
-  { path: "/User", component: User },
-  { name: "tags", path: "/tags", component: Tags },
+  {
+    path: "/statistic",
+    meta: {
+      requireAuth: true
+    },
+    component: () => import("@/views/statistic/index.vue")
+  },
+  {
+    path: "/user",
+    meta: {
+      requireAuth: true
+    },
+    component: () => import("@/views/user/index.vue")
+  },
+  {
+    name: "tags",
+    path: "/tags",
+    meta: {
+      requireAuth: true
+    },
+    component: () => import("@/views/tags/index.vue")
+  },
   {
     name: "tags.detail",
     path: "/tags/detail/:id",
-    component: Detail,
-    props: route => ({ id: route.query.id, from: route.query.from })
+    meta: {
+      requireAuth: true
+    },
+    component: () => import("@/views/detail/index.vue"),
+    props: route => ({
+      id: route.params.id,
+      mode: route.query.mode,
+      type: route.query.type,
+      from: route.query.from
+    })
   }
 ];
+
+// 页面刷新时，重新赋值token
+if (window.localStorage.getItem("token")) {
+  store.state.token = window.localStorage.getItem("token");
+}
 export const router = createRouter({
   history: createWebHashHistory(),
   routes
+});
+router.beforeEach((to, from, next) => {
+  if (to.meta.requireAuth) {
+    if (store.state.token) {
+      next();
+    } else {
+      next({
+        path: "/login",
+        params: { redirect: to.fullPath }
+      });
+    }
+  } else {
+    next();
+  }
 });

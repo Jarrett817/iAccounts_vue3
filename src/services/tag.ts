@@ -3,6 +3,7 @@ interface Response {
   id: number;
   name: string;
   icon: string;
+  type: "expend" | "income";
 }
 interface ResponseMsg {
   status: number;
@@ -11,7 +12,7 @@ interface ResponseMsg {
 class TagService extends Xhr {
   constructor() {
     super();
-    this.modelPath = "/tag";
+    this.modelPath = "/tags";
   }
   getTags(params?: { type: "expend" | "income" }) {
     return this.http<Response[]>({
@@ -39,6 +40,14 @@ class TagService extends Xhr {
   updateTargetTag(body: { id: number; name: string; icon: string }) {
     return this.http<ResponseMsg>({
       method: "put",
+      url: "",
+      body
+    });
+  }
+
+  addTag(body: { name: string; icon: string; type: "expend" | "income" }) {
+    return this.http<ResponseMsg>({
+      method: "post",
       url: "",
       body
     });

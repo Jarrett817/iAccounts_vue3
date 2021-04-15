@@ -1,12 +1,21 @@
 <template>
-  <canvas :id="canvasId"></canvas>
+  <template v-if="source?.length">
+    <canvas :id="canvasId"></canvas>
+  </template>
+  <template v-else>
+    <van-empty
+      class="custom-image"
+      image="src/assets/emptyStatus/emptyStatistic.png"
+      description="暂无数据"
+    />
+  </template>
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, onMounted } from "vue";
+import { defineComponent, nextTick, onBeforeUnmount, watch } from "vue";
 import dayjs from "dayjs";
-import { barFn } from "./charts";
-import F2 from "@antv/f2";
+import { barFn, ringFn, lineFn } from "./charts";
+import F2, { Chart } from "@antv/f2";
 
 export default defineComponent({
   components: {},
@@ -22,14 +31,41 @@ export default defineComponent({
     }
   },
   setup(props) {
-    const canvasId = `chart${dayjs().valueOf()}`;
-    onMounted(() => {
-      const chart = new F2.Chart({
-        id: canvasId,
-        pixelRatio: window.devicePixelRatio // 指定分辨率
-      });
-      barFn(chart, props.source as []);
-      chart.render();
+    const canvasId = `chart${dayjs().valueOf() + Math.random() * 1000}`;
+    const fns: { [key: string]: Function } = {
+      bar: barFn,
+      ring: ringFn,
+      line: lineFn
+    };
+    let chart: Chart | null = null;
+    watch(
+      () => props.source,
+      async newSource => {
+        if (newSource?.length) {
+          if (!chart) {
+            await nextTick();
+            chart = new F2.Chart({
+              id: canvasId,
+              pixelRatio: window.devicePixelRatio // 指定分辨率
+            });
+            fns[props.chartType](chart, props.source as []);
+            chart.render();
+          } else {
+            fns[props.chartType](chart, props.source as []);
+            chart.repaint();
+          }
+        } else {
+          chart && chart.clear();
+        }
+      },
+      {
+        immediate: true
+      }
+    );
+    onBeforeUnmount(() => {
+      if (chart) {
+        chart.destroy();
+      }
     });
     return { canvasId };
   }
