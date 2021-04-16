@@ -2,18 +2,20 @@
   <div class="bill-list" v-if="result?.length">
     <ul v-for="(group, index) in result" :key="index">
       <p>
-        <span>{{ groupTime(group[0].createAt) }}</span>
+        <span>{{ groupTime(group[0].createdAt) }}</span>
         <span v-html="dailyBalance(group)"></span>
       </p>
       <van-divider />
-      <li v-for="(item, index) in group" :key="item.createAt">
+      <li v-for="(item, index) in group" :key="item.createdAt">
         <router-link :to="`/billList/detail/${item.id}?from=billList`">
           <div class="bill-item">
             <div class="icon-title-wrap">
               <svg-icon :name="item.tag.icon"></svg-icon>
               <span>{{ item.tag.name }}</span>
             </div>
-            <span>{{ `${item.type === "expend" ? "-" : "+"}${item.value}` }}</span>
+            <span :class="[isExpend(item.type) ? 'expend-color' : 'income-color']">{{
+              `${item.type === "expend" ? "-" : "+"}${item.value}`
+            }}</span>
           </div>
         </router-link>
         <van-divider v-if="group[index + 1]" :style="{ padding: '4px 32px' }"></van-divider>
@@ -53,13 +55,13 @@ export default defineComponent({
       result.value = [];
       const _listData = props.listData;
       _listData.sort((pre: ListItem, next: ListItem) => {
-        if (pre.createAt! > next.createAt!) return -1;
-        else if (pre.createAt! < next.createAt!) return 1;
+        if (pre.createdAt! > next.createdAt!) return -1;
+        else if (pre.createdAt! < next.createdAt!) return 1;
         else return 0;
       });
       // 聚合同一天的数据
       _listData.forEach(dataItem => {
-        const date = dayjs(dataItem.createAt!).format("YYYYMMDD");
+        const date = dayjs(dataItem.createdAt!).format("YYYYMMDD");
         groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
       });
       result.value = Object.keys(groups).map((key: string) => {
@@ -83,7 +85,12 @@ export default defineComponent({
       expend ? (result += `支出：${expend}`) : "";
       return result;
     };
-    return { result, groupTime, dailyBalance };
+
+    const isExpend = (type: string) => {
+      if (type === "expend") return true;
+      else return false;
+    };
+    return { result, groupTime, dailyBalance, isExpend };
   }
 });
 </script>
@@ -130,5 +137,11 @@ export default defineComponent({
 }
 .van-divider {
   margin: 4px 0;
+}
+.income-color {
+  color: #e67e81;
+}
+.expend-color {
+  color: #4ca2f8;
 }
 </style>

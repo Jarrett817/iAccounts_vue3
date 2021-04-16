@@ -44,8 +44,8 @@ export default defineComponent({
       const startTime = dayjs(timeValue.value).startOf("month").valueOf();
       const endTime = dayjs(timeValue.value).endOf("month").valueOf();
       billService.getListByTimeSlot({ startTime, endTime, listType: 0 }).then(res => {
-        barDataFormatter(res.detail);
-        ringDataFormatter(res.detail);
+        barDataFormatter(res);
+        ringDataFormatter(res);
       });
     };
     renderByDatePicker();
@@ -53,49 +53,67 @@ export default defineComponent({
       const startTime = dayjs(timeValue.value).startOf("month").valueOf();
       const endTime = dayjs(timeValue.value).endOf("month").valueOf();
       billService.getListByTimeSlot({ startTime, endTime, listType: 0 }).then(res => {
-        ringDataFormatter(res.detail);
+        ringDataFormatter(res);
       });
     });
     const barDataFormatter = (data: ListItem[]) => {
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
-        return dayjs(item.createAt).month() === dayjs(timeValue.value).month();
+        return dayjs(item.createdAt).month() === dayjs(timeValue.value).month();
       });
       curMonthDataList.sort((pre: ListItem, next: ListItem) => {
-        if (pre.createAt! > next.createAt!) {
-          return -1;
-        } else if (pre.createAt! < next.createAt!) {
+        if (pre.createdAt! > next.createdAt!) {
           return 1;
+        } else if (pre.createdAt! < next.createdAt!) {
+          return -1;
         } else {
-          ``;
           return 0;
         }
       });
       barSource.value = [];
-
-      barSource.value = curMonthDataList.map((item: ListItem) => {
-        return {
-          name: item.type === "expend" ? "支出" : "收入",
-          xAxisVal: dayjs(item.createAt).format("MM-DD"),
-          yAxisVal: item.value
-        };
-      });
+      const result: CommonDataItem[] = [];
+      for (let i = 0; i < dayjs(timeValue.value).endOf("month").date(); i++) {
+        let dayilyExpend = 0;
+        let dailyIncome = 0;
+        const date = dayjs(timeValue.value).date(i + 1);
+        curMonthDataList.forEach((item: ListItem) => {
+          if (date.isSame(dayjs(item.createdAt), "day")) {
+            item.type === "expend" ? (dayilyExpend += item.value) : (dailyIncome += item.value);
+          }
+        });
+        [
+          { name: "支出", xAxisVal: date.format("DD"), yAxisVal: dayilyExpend },
+          { name: "收入", xAxisVal: date.format("DD"), yAxisVal: dailyIncome }
+        ].forEach(item => {
+          result.push(item as CommonDataItem);
+        });
+      }
+      barSource.value = result;
     };
     const ringDataFormatter = (data: ListItem[]) => {
       const activeType = ringActiveIndex.value ? "income" : "expend";
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
         return (
-          dayjs(item.createAt).month() === dayjs(timeValue.value).month() &&
+          dayjs(item.createdAt).month() === dayjs(timeValue.value).month() &&
           item.type === activeType
         );
       });
       ringSource.value = [];
-      ringSource.value = curMonthDataList.map((item: ListItem) => {
-        return {
-          name: item.tag.name,
-          value: item.value,
-          type: item.type
-        };
+      const keyMap: { [key: string]: number } = {};
+      curMonthDataList.forEach((item: ListItem) => {
+        const tagName = item.tag.name;
+
+        keyMap[tagName] ? (keyMap[tagName] += item.value) : (keyMap[tagName] = item.value);
       });
+
+      const result: { name: string; value: number; type: "expend" | "income" }[] = [];
+      Object.keys(keyMap).forEach(key => {
+        result.push({
+          name: key,
+          value: keyMap[key],
+          type: activeType
+        });
+      });
+      ringSource.value = result;
     };
     const formattedDate = computed(() => {
       return dayjs(timeValue.value).format("YYYY-MM");

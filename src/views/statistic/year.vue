@@ -15,7 +15,7 @@ import Chart from "@/views/components/chart.vue";
 import { billService } from "@/services";
 import DatePicker from "@/components/date-picker.vue";
 import { CommonDataItem } from "../common/types";
-
+import { cloneDeep } from "lodash";
 interface ListItem {
   month: number;
   expend: number;
@@ -44,12 +44,12 @@ export default defineComponent({
       return result;
     });
     const dataFormatter = (data: ListItem[], source: Ref<CommonDataItem[]>, type: string) => {
-      const _data = data;
+      const _data = cloneDeep(data);
       _data.sort((pre: ListItem, next: ListItem) => {
         if (pre.month > next.month) {
-          return -1;
-        } else if (pre.month < next.month) {
           return 1;
+        } else if (pre.month < next.month) {
+          return -1;
         } else {
           return 0;
         }
@@ -61,12 +61,16 @@ export default defineComponent({
           [
             {
               name: "支出" as "支出" | "收入",
-              xAxisVal: dayjs(item.month).format("MM"),
+              xAxisVal: dayjs()
+                .month(item.month - 1)
+                .format("MM"),
               yAxisVal: item.expend
             },
             {
               name: "收入" as "支出" | "收入",
-              xAxisVal: dayjs(item.month).format("MM"),
+              xAxisVal: dayjs()
+                .month(item.month - 1)
+                .format("MM"),
               yAxisVal: item.income
             }
           ].forEach(item => {
@@ -75,12 +79,16 @@ export default defineComponent({
         } else {
           [
             {
-              xAxisVal: dayjs(item.month).format("MM"),
+              xAxisVal: dayjs()
+                .month(item.month - 1)
+                .format("MM"),
               yAxisVal: item.expend,
               name: "支出" as "支出" | "收入"
             },
             {
-              xAxisVal: dayjs(item.month).format("MM"),
+              xAxisVal: dayjs()
+                .month(item.month - 1)
+                .format("MM"),
               yAxisVal: item.income,
               name: "收入" as "支出" | "收入"
             }
@@ -88,8 +96,6 @@ export default defineComponent({
             result.push(item);
           });
         }
-
-        result.push();
       });
       source.value = result;
     };
@@ -98,7 +104,9 @@ export default defineComponent({
       () => {
         billService
           .getListByYear({
-            year: dayjs(((monthList as unknown) as [])[activeIndex.value]).valueOf()
+            year: dayjs(((monthList as unknown) as [])[activeIndex.value])
+              .year()
+              .valueOf()
           })
           .then(res => {
             dataFormatter(res, barSource, "bar");

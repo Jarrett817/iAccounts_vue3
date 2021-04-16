@@ -19,7 +19,7 @@ export const ringFn = (chart: F2.Chart, data: DataItem[]) => {
   chart.legend({
     position: "right",
     itemFormatter: function itemFormatter(val) {
-      return val + "    " + (map[val] * 100).toFixed(2) + "%";
+      return val + "    " + ((map[val] / total) * 100).toFixed(2) + "%";
     }
   });
   chart.coord("polar", {

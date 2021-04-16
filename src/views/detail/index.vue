@@ -17,7 +17,7 @@
     <template v-slot:main>
       <template v-if="from === 'tags'">
         <van-cell-group>
-          <van-field label="名称" v-model="tagMap.name" />
+          <van-field label="名称" maxlength="4" v-model="tagMap.name" />
           <van-field label="图标" @click-right-icon="showIconList = true" readonly>
             <template #right-icon>
               <svg-icon :name="tagMap.icon" />
@@ -33,7 +33,7 @@
             v-for="(value, key) in {
               type: billsMap.type,
               value: billsMap.value,
-              createAt: billsMap.createAt,
+              createdAt: billsMap.createdAt,
               desc: billsMap.desc
             }"
             :key="key"
@@ -93,7 +93,7 @@ export default defineComponent({
       value: "金额",
       type: "类型",
       desc: "备注",
-      createAt: "日期"
+      createdAt: "日期"
     };
     const tagMap: {
       id: number | null;
@@ -110,7 +110,7 @@ export default defineComponent({
         name: "",
         icon: ""
       },
-      createAt: undefined
+      createdAt: undefined
     });
     const moneyPannelVisible = ref(false);
     const showIconList = ref(false);
@@ -132,7 +132,7 @@ export default defineComponent({
     const fieldValueFormatter = (key: string, val: any) => {
       if (key === "type") {
         return val === "expend" ? "支出" : "收入";
-      } else if (key === "createAt") {
+      } else if (key === "createdAt") {
         return dayjs(val).format("YYYY-MM-DD HH:mm:ss");
       } else {
         return val;

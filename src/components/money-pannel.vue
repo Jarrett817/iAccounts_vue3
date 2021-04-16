@@ -59,7 +59,7 @@ import { computed, defineComponent, reactive, ref, watchEffect } from "vue";
 import DatePicker from "@/components/date-picker.vue";
 import { billService, tagService } from "@/services/";
 import dayjs from "dayjs";
-
+import { Notify } from "vant";
 type BalanceType = "expend" | "income";
 interface Result {
   date: number;
@@ -95,26 +95,30 @@ export default defineComponent({
     const iconList = ref<{ id: number; icon: string; name: string; selected?: boolean }[]>([]);
 
     const datePickerShow = ref(false);
+    watchEffect(() => {
+      // 若已有参数，打开面板时进行填充
+      if (props.params) {
+        Object.assign(result, { ...props.params, value: props.params.value.toString() });
+
+        activeIndex.value = props.params.type === "expend" ? 0 : 1;
+      }
+    });
 
     watchEffect(() => {
       const types = ["expend", "income"];
       result.type = types[activeIndex.value] as BalanceType;
       tagService.getTags({ type: result.type }).then(res => {
         iconList.value = res;
+
+        iconList.value.forEach(item => {
+          if ((result.tagId || result.tagId === 0) && item.id === result.tagId) {
+            item.selected = true;
+          }
+        });
       });
     });
     const handleShow = computed({
       get() {
-        // 若已有参数，打开面板时进行填充
-        if (props.params) {
-          Object.assign(result, { ...props.params, value: props.params.value.toString() });
-          iconList.value.forEach(item => {
-            if (item.id === result.tagId) {
-              item.selected = true;
-            }
-          });
-          activeIndex.value = props.params.type === "expend" ? 0 : 1;
-        }
         return props.show;
       },
       set(val) {
@@ -137,29 +141,57 @@ export default defineComponent({
       result.date = dayjs(date).valueOf();
       datePickerShow.value = false;
     };
-    const onClose = () => {
-      if (props.params) {
-        billService.updateTargetBill({
-          desc: result.desc,
-          type: result.type,
-          value: Number(result.value),
-          id: result.id as number,
-          tagId: result.tagId as number
-        });
-      } else {
-        billService.addBill({ ...result, value: Number(Number(result.value).toFixed(2)) });
+    const onCloseValidator = () => {
+      let flag = true;
+      if (!(result.tagId || result.tagId === 0)) {
+        Notify({ type: "warning", message: "至少需要选择一个记账标签" });
+        flag = false;
+      } else if (Number(result.value) === 0) {
+        Notify({ type: "warning", message: "金额不能为0" });
+        flag = false;
       }
-      handleShow.value = false;
-      setTimeout(() => {
-        const emptyResult = {
-          date: dayjs().valueOf(),
-          value: "",
-          type: "expend",
-          desc: "",
-          tagId: null
-        };
-        Object.assign(result, emptyResult);
-      }, 500);
+      return flag;
+    };
+    const onClose = () => {
+      const closePannelAndclearParams = () => {
+        handleShow.value = false;
+        setTimeout(() => {
+          const emptyResult = {
+            date: dayjs().valueOf(),
+            value: "",
+            type: "expend",
+            desc: "",
+            tagId: null
+          };
+          Object.assign(result, emptyResult);
+        }, 500);
+      };
+      if (props.params) {
+        if (onCloseValidator()) {
+          billService
+            .updateTargetBill({
+              desc: result.desc,
+              type: result.type,
+              value: Number(result.value),
+              id: result.id as number,
+              tagId: result.tagId as number
+            })
+            .then(res => {
+              Notify({ type: "success", message: "修改成功" });
+            });
+          closePannelAndclearParams();
+        }
+      } else {
+        if (onCloseValidator()) {
+          billService
+            .addBill({ ...result, value: Number(Number(result.value).toFixed(2)) })
+            .then(res => {
+              Notify({ type: "success", message: "新增成功" });
+            });
+
+          closePannelAndclearParams();
+        }
+      }
     };
     const onIconClick = (event: MouseEvent) => {
       const el = event.currentTarget as HTMLDivElement;

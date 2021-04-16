@@ -9,7 +9,7 @@ interface Detail {
     name: string;
     icon: string;
   };
-  createAt: number;
+  createdAt: number;
 }
 interface Balance {
   expend: number;

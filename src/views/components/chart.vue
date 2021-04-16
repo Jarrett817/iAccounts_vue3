@@ -55,7 +55,7 @@ export default defineComponent({
             chart.repaint();
           }
         } else {
-          chart && chart.clear();
+          chart && chart.clear() && (chart = null);
         }
       },
       {
