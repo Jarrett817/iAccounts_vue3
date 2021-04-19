@@ -5,6 +5,8 @@
       :type="type"
       :title="title"
       :visible-item-count="visibleItemCount"
+      :min-date="minDate"
+      :max-date="maxDate"
       @confirm="handleConfirm"
       @cancel="handleCancel"
     ></van-datetime-picker>
@@ -12,12 +14,13 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, computed } from "vue";
+import { defineComponent, computed, ref } from "vue";
+import dayjs, { Dayjs } from "dayjs";
 export default defineComponent({
   components: {},
   props: {
     timeValue: {
-      type: String,
+      type: Date,
       default: null
     },
     type: {
@@ -31,10 +34,20 @@ export default defineComponent({
     title: {
       type: String,
       default: ""
+    },
+    wholeTimeSlot: {
+      type: Object,
+      default: () => {}
     }
   },
   emits: ["update:time-value", "date-confirm"],
   setup(props, context) {
+    const minDate = ref<Date>(new Date(dayjs().year() - 3, 0));
+    const maxDate = ref<Date>(new Date(dayjs().year(), 11));
+    if (props.wholeTimeSlot) {
+      minDate.value = new Date(props.wholeTimeSlot.minDate);
+      maxDate.value = new Date(props.wholeTimeSlot.maxDate);
+    }
     const currentDate = computed({
       get: (): string => props.timeValue,
       set: (val: string) => {
@@ -47,7 +60,8 @@ export default defineComponent({
     const handleCancel = () => {
       context.emit("date-confirm");
     };
-    return { handleConfirm, currentDate, handleCancel };
+
+    return { minDate, maxDate, handleConfirm, currentDate, handleCancel };
   }
 });
 </script>

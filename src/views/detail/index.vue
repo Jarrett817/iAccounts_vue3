@@ -49,7 +49,7 @@
         <van-button type="default" @click="editClick">{{
           from === "tags" ? "保存" : "编辑"
         }}</van-button>
-        <van-button type="default" @click="deleteClick">删除</van-button>
+        <van-button v-if="mode !== 'add'" type="default" @click="deleteClick">删除</van-button>
       </div>
       <money-pannel
         v-model:show="moneyPannelVisible"
@@ -212,8 +212,11 @@ export default defineComponent({
 }
 .button-wrap {
   height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   .van-button {
-    width: 50vw;
+    flex: 1;
     height: 100%;
   }
 }

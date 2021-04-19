@@ -28,11 +28,7 @@ export const ringFn = (chart: F2.Chart, data: DataItem[]) => {
     radius: 1
   });
   chart.axis(false);
-  chart
-    .interval()
-    .position("a*value")
-    .color("name", ["#FE5D4D", "#3BA4FF", "#737DDE"])
-    .adjust("stack");
+  chart.interval().position("a*value").color("name").adjust("stack");
 
   chart.guide().clear();
   chart.guide().html({
@@ -43,7 +39,8 @@ export const ringFn = (chart: F2.Chart, data: DataItem[]) => {
     tranform:translateY(-50%);
     white-space:nowrap;
     text-align: center;">
-      <div style="font-size: 10px">${data[0].type === "expend" ? "总支出" : "总收入"}:${total}</div>
+      <div style="font-size: 10px">${data[0].type === "expend" ? "月支出" : "月收入"}</div>
+      <div  style="font-size: 18px">${total}</div>
     </div>`
   });
   chart.source(data);

@@ -21,7 +21,7 @@ interface ListParams {
   listType: number;
 }
 interface AddParams {
-  date: number;
+  createdAt: number;
   value: number;
   type: string;
   desc: string;
@@ -77,7 +77,14 @@ class BillService extends Xhr {
       params
     });
   }
-  updateTargetBill(body: { id: number; type: string; value: number; desc: string; tagId: number }) {
+  updateTargetBill(body: {
+    id: number;
+    type: string;
+    value: number;
+    desc: string;
+    tagId: number;
+    createdAt: number;
+  }) {
     return this.http<ResponseMsg>({
       method: "put",
       url: "/detail",

@@ -53,20 +53,22 @@ export default defineComponent({
     watchEffect(() => {
       groups = {};
       result.value = [];
-      const _listData = props.listData;
-      _listData.sort((pre: ListItem, next: ListItem) => {
-        if (pre.createdAt! > next.createdAt!) return -1;
-        else if (pre.createdAt! < next.createdAt!) return 1;
-        else return 0;
-      });
-      // 聚合同一天的数据
-      _listData.forEach(dataItem => {
-        const date = dayjs(dataItem.createdAt!).format("YYYYMMDD");
-        groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
-      });
-      result.value = Object.keys(groups).map((key: string) => {
-        return groups[key];
-      });
+      if (props.listData?.length) {
+        const _listData = props.listData;
+        _listData.sort((pre: ListItem, next: ListItem) => {
+          if (pre.createdAt! > next.createdAt!) return -1;
+          else if (pre.createdAt! < next.createdAt!) return 1;
+          else return 0;
+        });
+        // 聚合同一天的数据
+        _listData.forEach(dataItem => {
+          const date = dayjs(dataItem.createdAt!).format("YYYYMMDD");
+          groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
+        });
+        result.value = Object.keys(groups).map((key: string) => {
+          return groups[key];
+        });
+      }
     });
     const weekDay = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
     const groupTime = (time: number | undefined) => {

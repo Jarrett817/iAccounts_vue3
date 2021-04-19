@@ -6,6 +6,7 @@
           title="选择年月"
           v-model:time-value="timeValue"
           @date-confirm="handleConfirm"
+          :wholeTimeSlot="wholeTimeSlot"
         ></date-picker>
       </van-dropdown-item>
     </van-dropdown-menu>
@@ -18,7 +19,7 @@
 </template>
 
 <script lang="ts">
-import { computed, watch, defineComponent, ref, watchEffect } from "vue";
+import { computed, watch, defineComponent, ref } from "vue";
 import dayjs from "dayjs";
 import Chart from "@/views/components/chart.vue";
 import { billService } from "@/services";
@@ -33,6 +34,12 @@ interface RingDataItem {
 
 export default defineComponent({
   components: { Chart, DatePicker },
+  props: {
+    wholeTimeSlot: {
+      type: Object,
+      default: () => {}
+    }
+  },
   setup() {
     const barSource = ref<CommonDataItem[]>([]);
     let ringSource = ref<RingDataItem[]>([]);
@@ -40,6 +47,7 @@ export default defineComponent({
     const datePickerDropdown = ref<{ toggle: Function } | null>(null);
     const curDate = new Date();
     const timeValue = ref<Date>(curDate);
+
     const renderByDatePicker = () => {
       const startTime = dayjs(timeValue.value).startOf("month").valueOf();
       const endTime = dayjs(timeValue.value).endOf("month").valueOf();
@@ -48,6 +56,7 @@ export default defineComponent({
         ringDataFormatter(res);
       });
     };
+
     renderByDatePicker();
     watch(ringActiveIndex, () => {
       const startTime = dayjs(timeValue.value).startOf("month").valueOf();
@@ -57,6 +66,7 @@ export default defineComponent({
       });
     });
     const barDataFormatter = (data: ListItem[]) => {
+      if (!data?.length) return;
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
         return dayjs(item.createdAt).month() === dayjs(timeValue.value).month();
       });
@@ -90,6 +100,7 @@ export default defineComponent({
       barSource.value = result;
     };
     const ringDataFormatter = (data: ListItem[]) => {
+      if (!data?.length) return;
       const activeType = ringActiveIndex.value ? "income" : "expend";
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
         return (

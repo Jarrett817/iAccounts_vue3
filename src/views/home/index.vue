@@ -17,6 +17,7 @@
                 title="选择年月"
                 v-model:time-value="timeValue"
                 @date-confirm="handleConfirm"
+                :wholeTimeSlot="wholeTimeSlot"
               ></date-picker>
             </van-dropdown-item>
             <van-dropdown-item v-model="curType" :options="listTypeOptions"> </van-dropdown-item>
@@ -32,7 +33,7 @@
 import DashBoard from "../components/dash-board.vue";
 import DatePicker from "@/components/date-picker.vue";
 import BillList from "./bill-list.vue";
-import { computed, defineComponent, ref, watch } from "vue";
+import { computed, defineComponent, reactive, ref, watch } from "vue";
 import { billService } from "@/services/";
 import { ListItem } from "../common/types";
 import dayjs from "dayjs";
@@ -63,7 +64,14 @@ export default defineComponent({
       { text: "收入", value: 2 }
     ];
     const curType = ref(0);
-
+    const wholeTimeSlot = reactive<{ minDate: number | null; maxDate: number | null }>({
+      minDate: null,
+      maxDate: null
+    });
+    billService.getTimeSlot().then(res => {
+      wholeTimeSlot.minDate = res.minDate;
+      wholeTimeSlot.maxDate = res.maxDate;
+    });
     const getStatistic = (date: Date, listType: number) => {
       const startTime = dayjs(date).startOf("month").valueOf();
       const endTime = dayjs(date).endOf("month").valueOf();
@@ -98,7 +106,8 @@ export default defineComponent({
       listTypeOptions,
       dashBoardMonth,
       detailList,
-      listContainer
+      listContainer,
+      wholeTimeSlot
     };
   }
 });

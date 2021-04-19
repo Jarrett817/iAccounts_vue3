@@ -1,7 +1,7 @@
 <template>
   <div class="dash-board">
     <h2>{{ month }}月支出</h2>
-    <h2 class="expend">-{{ expend }}</h2>
+    <span class="expend">-{{ expend }}</span>
     <h3>
       <span>{{ month }}月收入</span><span class="income">+{{ income }}</span>
     </h3>
@@ -46,9 +46,11 @@ export default defineComponent({
   padding: 4px 24px;
   h2 {
     font-size: 18px;
-    &.expend {
-      color: #4ca2f8;
-    }
+    padding-bottom: 2px;
+  }
+  span.expend {
+    font-size: 18px;
+    color: #4ca2f8;
   }
   h3 {
     font-size: 18px;

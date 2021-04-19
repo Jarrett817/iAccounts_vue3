@@ -56,7 +56,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, reactive } from "vue";
+import { defineComponent, reactive, inject, watch } from "vue";
 import { useRouter } from "vue-router";
 import { useStore } from "vuex";
 export default defineComponent({
@@ -74,6 +74,7 @@ export default defineComponent({
     });
     const store = useStore();
     const router = useRouter();
+    const reload: Function = inject("reload") as Function;
     const onSubmit = async (values: { id: string; password: string }) => {
       if (props.type === "register") {
         await store.dispatch("registerAsync", values);
@@ -86,6 +87,12 @@ export default defineComponent({
         }
       }
     };
+    watch(
+      () => props.type,
+      () => {
+        reload();
+      }
+    );
     return { userInfo, onSubmit };
   }
 });

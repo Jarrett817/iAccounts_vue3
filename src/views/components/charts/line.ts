@@ -10,6 +10,10 @@ export const lineFn = (chart: F2.Chart, data: DataItem[]) => {
     position: "bottom",
     offsetY: -5
   });
-  chart.line().position("xAxisVal*yAxisVal").color("name").shape("name", "line");
+  chart
+    .line()
+    .position("xAxisVal*yAxisVal")
+    .color("name", ["#4ca2f8", "#e67e81"])
+    .shape("name", "line");
   chart.source(data);
 };
