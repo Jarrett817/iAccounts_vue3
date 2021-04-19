@@ -66,6 +66,7 @@ export default defineComponent({
       });
     });
     const barDataFormatter = (data: ListItem[]) => {
+      barSource.value = [];
       if (!data?.length) return;
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
         return dayjs(item.createdAt).month() === dayjs(timeValue.value).month();
@@ -79,7 +80,6 @@ export default defineComponent({
           return 0;
         }
       });
-      barSource.value = [];
       const result: CommonDataItem[] = [];
       for (let i = 0; i < dayjs(timeValue.value).endOf("month").date(); i++) {
         let dayilyExpend = 0;
@@ -100,6 +100,7 @@ export default defineComponent({
       barSource.value = result;
     };
     const ringDataFormatter = (data: ListItem[]) => {
+      ringSource.value = [];
       if (!data?.length) return;
       const activeType = ringActiveIndex.value ? "income" : "expend";
       const curMonthDataList: ListItem[] = data.filter((item: ListItem) => {
@@ -108,7 +109,6 @@ export default defineComponent({
           item.type === activeType
         );
       });
-      ringSource.value = [];
       const keyMap: { [key: string]: number } = {};
       curMonthDataList.forEach((item: ListItem) => {
         const tagName = item.tag.name;

@@ -53,6 +53,7 @@ export default defineComponent({
       return result;
     });
     const dataFormatter = (data: ListItem[], source: Ref<CommonDataItem[]>, type: string) => {
+      source.value = [];
       if (!data?.length) return;
       const _data = cloneDeep(data);
       _data.sort((pre: ListItem, next: ListItem) => {
@@ -64,7 +65,6 @@ export default defineComponent({
           return 0;
         }
       });
-      source.value = [];
       const result: { name: "支出" | "收入"; xAxisVal: string; yAxisVal: number }[] = [];
       _data.forEach((item: ListItem) => {
         if (type === "bar") {
@@ -114,9 +114,7 @@ export default defineComponent({
       () => {
         billService
           .getListByYear({
-            year: dayjs(((monthList as unknown) as [])[activeIndex.value])
-              .year()
-              .valueOf()
+            year: Number(((monthList.value as unknown) as [])[activeIndex.value])
           })
           .then(res => {
             dataFormatter(res, barSource, "bar");
