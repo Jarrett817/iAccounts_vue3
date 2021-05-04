@@ -87,7 +87,7 @@ class BillService extends Xhr {
   }) {
     return this.http<ResponseMsg>({
       method: "put",
-      url: "/detail",
+      url: "",
       body
     });
   }

@@ -3,12 +3,12 @@ import { Xhr } from "./xhr";
 class LoginService extends Xhr {
   constructor() {
     super();
-    this.modelPath = "/login";
+    this.modelPath = "/user";
   }
   login(body: { id: string; password: string }) {
     return this.http<{ status: number; msg: string; token?: string }>({
       method: "post",
-      url: "",
+      url: "/login",
       body
     });
   }

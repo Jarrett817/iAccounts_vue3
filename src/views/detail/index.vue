@@ -3,7 +3,6 @@
     <template v-slot:header>
       <van-nav-bar
         left-text="返回"
-        :right-text="from === 'tags' ? '' : '分享'"
         left-arrow
         :title="from === 'tags' ? (mode === 'add' ? '新建标签' : '编辑标签') : ''"
         @click-left="onClickLeft"
