@@ -36,5 +36,4 @@ const store = createStore<GlobalData>({
     }
   }
 });
-
 export { store };
