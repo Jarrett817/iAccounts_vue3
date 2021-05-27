@@ -75,7 +75,7 @@ if (window.localStorage.getItem("token")) {
   store.state.token = window.localStorage.getItem("token");
 }
 export const router = createRouter({
-  history: createWebHashHistory("/iAccounts/"),
+  history: createWebHashHistory(),
   routes
 });
 router.beforeEach((to, from, next) => {

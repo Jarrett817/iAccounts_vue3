@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 interface Options {
   method: string;
   url: string;
@@ -7,11 +7,11 @@ interface Options {
   responseType?: string;
 }
 export class Xhr {
-  baseURL = '';
-  modelPath = '';
+  baseURL = "";
+  modelPath = "";
   constructor() {
-    this.baseURL = '/iAccounts';
-    this.modelPath = ''; // 后端 API 根路径
+    this.baseURL = "/iAccounts/api/v1";
+    this.modelPath = ""; // 后端 API 根路径
   }
   http<T>(options: Options, config?: any) {
     const {
@@ -19,7 +19,7 @@ export class Xhr {
       url,
       body = {},
       params = {},
-      responseType = '',
+      responseType = ""
     }: {
       method: string;
       url: string;
@@ -35,11 +35,11 @@ export class Xhr {
       baseURL: this.baseURL,
       params,
       headers: {
-        'Content-Type': 'application/json;charset=UTF-8',
+        "Content-Type": "application/json;charset=UTF-8"
       },
       responseType,
       // 其余自定义选项
-      ...config,
+      ...config
     }) as unknown) as Promise<T>;
   }
 }
