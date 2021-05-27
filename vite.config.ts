@@ -15,7 +15,7 @@ const vantConfig = {
 
 export default defineConfig({
   plugins: [vue(), styleImport({ libs: [vantConfig] }), svgBuilder("src/assets/svg/")],
-  base: process.env.NODE_ENV === "production" ? "/iAccounts/" : "/",
+  base: "/",
   server: {
     port: 3000,
     strictPort: true,
