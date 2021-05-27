@@ -1,11 +1,23 @@
 <template>
-  <router-view />
+  <router-view v-if="isRouterAlive" />
 </template>
 
 <script lang="ts">
-import { defineComponent } from "vue";
+import { defineComponent, provide, ref, nextTick } from "vue";
 
-export default defineComponent({ name: "App" });
+export default defineComponent({
+  name: "App",
+  setup() {
+    const isRouterAlive = ref(true);
+    provide("reload", () => {
+      isRouterAlive.value = false;
+      nextTick(() => {
+        isRouterAlive.value = true;
+      });
+    });
+    return { isRouterAlive };
+  }
+});
 </script>
 
 <style lang="scss">

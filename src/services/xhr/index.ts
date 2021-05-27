@@ -6,10 +6,21 @@ import { store } from "@/store";
 type DialogType = "success" | "primary" | "danger" | "warning";
 const keyArray: DialogType[] = ["success", "primary", "danger", "warning"];
 axios.interceptors.response.use(response => {
-  const { result, data, msg = "请求失败", error } = response?.data || {};
-  if (result && result !== 0) {
+  const { result, data, error } = response?.data || {};
+  if (Number(result) === 401) {
+    // 401 清除token信息并跳转到登录页面
+    store.commit("logout");
+    // 只有在当前路由不是登录页面才跳转
+    router.currentRoute.value.path !== "/login" &&
+      router.replace({
+        path: "login",
+        query: { redirect: router.currentRoute.value.path }
+      });
+    return;
+  }
+  if (Number(result) && Number(result) !== 0) {
     Notify({ type: "danger", message: error });
-  } else if (result === 0) {
+  } else if (Number(result) === 0) {
     if (data.msg) {
       Notify({ type: keyArray[data.status], message: data.msg });
     }
@@ -33,31 +44,6 @@ axios.interceptors.request.use(
   },
   err => {
     return Promise.reject(err);
-  }
-);
-
-// http response 拦截器
-axios.interceptors.response.use(
-  response => {
-    return response;
-  },
-  error => {
-    if (error.response) {
-      switch (error.response.status) {
-        case 401:
-          // 401 清除token信息并跳转到登录页面
-          store.commit("logout");
-
-          // 只有在当前路由不是登录页面才跳转
-          router.currentRoute.value.path !== "/login" &&
-            router.replace({
-              path: "login",
-              query: { redirect: router.currentRoute.value.path }
-            });
-      }
-    }
-    // console.log(JSON.stringify(error));//console : Error: Request failed with status code 402
-    return Promise.reject(error.response.data);
   }
 );
 export { Xhr };

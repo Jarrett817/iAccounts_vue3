@@ -39,5 +39,5 @@
     "src/views/components/i-edit.vue",
     "src/views/edit/index.vue"
   ],
-  "exclude": ["node_modules", "dist", "**/*.js"]
+  "exclude": ["node_modules", "dist", "**/*.js", "*.svg"]
 }

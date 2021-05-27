@@ -15,13 +15,13 @@ const vantConfig = {
 
 export default defineConfig({
   plugins: [vue(), styleImport({ libs: [vantConfig] }), svgBuilder("src/assets/svg/")],
-  base: "/",
+  base: process.env.NODE_ENV === "production" ? "/iAccounts/" : "/",
   server: {
     port: 3000,
     strictPort: true,
     proxy: {
       "^/iAccounts": {
-        target: "http://127.0.0.1:7001",
+        target: "http://121.41.54.54:7001",
         changeOrigin: true
       }
     }
@@ -50,25 +50,6 @@ export default defineConfig({
     }
   },
   build: {
-    rollupOptions: {
-      input: "index.html",
-      output: {
-        name: "iAccounts",
-        file: "iAccounts.js",
-        format: "umd"
-        // plugins: [terser()],
-      },
-      plugins: [
-        // scss({ include: /\.scss$/, sass: dartSass }),
-        // esbuild({
-        //   include: /\.[jt]s$/,
-        //   minify: process.env.NODE_ENV === 'production',
-        //   target: 'es2015',
-        // }),
-        // vue({
-        //   include: /\.vue$/,
-        // }),
-      ]
-    }
+    outDir: "dist"
   }
 });

@@ -8,7 +8,7 @@
     <template #main>
       <section>
         <month-module v-if="!activeIndex" :wholeTimeSlot="wholeTimeSlot"></month-module>
-        <year-module v-else :wholeTimeSlot="wholeTimeSlot"></year-module>
+        <year-module :wholeTimeSlot="wholeTimeSlot" v-else></year-module>
       </section>
     </template>
     <template #footer>
@@ -28,7 +28,6 @@ export default defineComponent({
   components: { Chart, DatePicker, MonthModule, YearModule },
   setup() {
     const activeIndex = ref<0 | 1>(0);
-
     const wholeTimeSlot = reactive<{ minDate: number | null; maxDate: number | null }>({
       minDate: null,
       maxDate: null
@@ -37,7 +36,6 @@ export default defineComponent({
       wholeTimeSlot.minDate = res.minDate;
       wholeTimeSlot.maxDate = res.maxDate;
     });
-
     const onWeekChange = (index: number) => {};
     return {
       wholeTimeSlot,

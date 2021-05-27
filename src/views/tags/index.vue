@@ -97,19 +97,18 @@ export default defineComponent({
 <style lang="scss" scoped>
 section {
   overflow: auto;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 60px);
   justify-content: space-between;
   height: 100%;
-  &::after {
-    content: "";
-    flex: 1;
-  }
+  align-content: start;
   .single-icon {
+    flex-shrink: 0;
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
     align-items: center;
+    flex-wrap: nowrap;
     margin: 12px;
     .van-icon {
       margin-bottom: 4px;

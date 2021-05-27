@@ -51,11 +51,12 @@ export default defineComponent({
             fns[props.chartType](chart, props.source as []);
             chart.render();
           } else {
+            chart.clear(); // 清除
             fns[props.chartType](chart, props.source as []);
-            chart.repaint();
+            chart.render();
           }
         } else {
-          chart && chart.clear();
+          chart && chart.clear() && (chart = null);
         }
       },
       {

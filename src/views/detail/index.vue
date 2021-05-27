@@ -3,7 +3,6 @@
     <template v-slot:header>
       <van-nav-bar
         left-text="返回"
-        :right-text="from === 'tags' ? '' : '分享'"
         left-arrow
         :title="from === 'tags' ? (mode === 'add' ? '新建标签' : '编辑标签') : ''"
         @click-left="onClickLeft"
@@ -17,7 +16,7 @@
     <template v-slot:main>
       <template v-if="from === 'tags'">
         <van-cell-group>
-          <van-field label="名称" v-model="tagMap.name" />
+          <van-field label="名称" maxlength="4" v-model="tagMap.name" />
           <van-field label="图标" @click-right-icon="showIconList = true" readonly>
             <template #right-icon>
               <svg-icon :name="tagMap.icon" />
@@ -33,7 +32,7 @@
             v-for="(value, key) in {
               type: billsMap.type,
               value: billsMap.value,
-              createAt: billsMap.createAt,
+              createdAt: billsMap.createdAt,
               desc: billsMap.desc
             }"
             :key="key"
@@ -49,7 +48,7 @@
         <van-button type="default" @click="editClick">{{
           from === "tags" ? "保存" : "编辑"
         }}</van-button>
-        <van-button type="default" @click="deleteClick">删除</van-button>
+        <van-button v-if="mode !== 'add'" type="default" @click="deleteClick">删除</van-button>
       </div>
       <money-pannel
         v-model:show="moneyPannelVisible"
@@ -93,7 +92,7 @@ export default defineComponent({
       value: "金额",
       type: "类型",
       desc: "备注",
-      createAt: "日期"
+      createdAt: "日期"
     };
     const tagMap: {
       id: number | null;
@@ -110,7 +109,7 @@ export default defineComponent({
         name: "",
         icon: ""
       },
-      createAt: undefined
+      createdAt: undefined
     });
     const moneyPannelVisible = ref(false);
     const showIconList = ref(false);
@@ -132,7 +131,7 @@ export default defineComponent({
     const fieldValueFormatter = (key: string, val: any) => {
       if (key === "type") {
         return val === "expend" ? "支出" : "收入";
-      } else if (key === "createAt") {
+      } else if (key === "createdAt") {
         return dayjs(val).format("YYYY-MM-DD HH:mm:ss");
       } else {
         return val;
@@ -212,8 +211,11 @@ export default defineComponent({
 }
 .button-wrap {
   height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
   .van-button {
-    width: 50vw;
+    flex: 1;
     height: 100%;
   }
 }
