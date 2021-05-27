@@ -35,7 +35,7 @@
         />
       </div>
       <div class="date-value-wrap">
-        <van-button size="large" icon="src/assets/svg/calendar.svg" @click="handleClick">
+        <van-button size="large" :icon="calendar" @click="handleClick">
           {{ buttonText }}
         </van-button>
         <div class="keyboard-value">{{ result.value || 0 }}</div>
@@ -75,6 +75,7 @@ import DatePicker from "@/components/date-picker.vue";
 import { billService, tagService } from "@/services/";
 import dayjs, { Dayjs } from "dayjs";
 import { Notify } from "vant";
+import calendar from "@/assets/svg/calendar.svg";
 type BalanceType = "expend" | "income";
 interface Result {
   createdAt: number;
@@ -250,7 +251,8 @@ export default defineComponent({
       handleShow,
       onIconClick,
       activeIndex,
-      timeValue
+      timeValue,
+      calendar
     };
   }
 });

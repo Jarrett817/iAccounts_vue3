@@ -3,11 +3,7 @@
     <canvas :id="canvasId"></canvas>
   </template>
   <template v-else>
-    <van-empty
-      class="custom-image"
-      image="src/assets/emptyStatus/emptyStatistic.png"
-      description="暂无数据"
-    />
+    <van-empty class="custom-image" :image="emptyStatistic" description="暂无数据" />
   </template>
 </template>
 
@@ -16,7 +12,7 @@ import { defineComponent, nextTick, onBeforeUnmount, watch } from "vue";
 import dayjs from "dayjs";
 import { barFn, ringFn, lineFn } from "./charts";
 import F2, { Chart } from "@antv/f2";
-
+import emptyStatistic from "@/assets/emptyStatus/emptyStatistic.png";
 export default defineComponent({
   components: {},
   props: {
@@ -68,7 +64,7 @@ export default defineComponent({
         chart.destroy();
       }
     });
-    return { canvasId };
+    return { canvasId, emptyStatistic };
   }
 });
 </script>

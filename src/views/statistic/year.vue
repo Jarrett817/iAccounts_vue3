@@ -9,11 +9,7 @@
     <div class="chart-wrap"><chart :source="barSource" chartType="bar"></chart></div>
   </template>
   <template v-else>
-    <van-empty
-      class="custom-image"
-      image="src/assets/emptyStatus/emptyStatistic.png"
-      description="暂无数据"
-    />
+    <van-empty class="custom-image" :image="emptyStatistic" description="暂无数据" />
   </template>
 </template>
 
@@ -25,6 +21,7 @@ import { billService } from "@/services";
 import DatePicker from "@/components/date-picker.vue";
 import { CommonDataItem } from "../common/types";
 import { cloneDeep } from "lodash";
+import emptyStatictic from "@/assets/emptyStatus/emptyStatistic.png";
 interface ListItem {
   month: number;
   expend: number;
@@ -130,7 +127,8 @@ export default defineComponent({
       activeIndex,
       monthList,
       barSource,
-      lineSource
+      lineSource,
+      emptyStatictic
     };
   }
 });

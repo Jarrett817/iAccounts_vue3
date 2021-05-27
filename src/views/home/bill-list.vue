@@ -23,11 +23,7 @@
     </ul>
   </div>
   <template v-else>
-    <van-empty
-      class="custom-image"
-      image="src/assets/emptyStatus/noBills.png"
-      description="一笔流水都没有，快去记一笔把"
-    />
+    <van-empty class="custom-image" :image="noBills" description="一笔流水都没有，快去记一笔把" />
   </template>
 </template>
 
@@ -35,7 +31,7 @@
 import { defineComponent, PropType, ref, watchEffect } from "vue";
 import dayjs from "dayjs";
 import { ListItem } from "../common/types";
-
+import noBills from "@/assets/emptyStatus/noBills.png";
 interface GroupData {
   [key: string]: ListItem[];
 }
@@ -92,7 +88,7 @@ export default defineComponent({
       if (type === "expend") return true;
       else return false;
     };
-    return { result, groupTime, dailyBalance, isExpend };
+    return { noBills, result, groupTime, dailyBalance, isExpend };
   }
 });
 </script>
