@@ -76,6 +76,7 @@ import { billService, tagService } from "@/services/";
 import dayjs, { Dayjs } from "dayjs";
 import { Notify } from "vant";
 import calendar from "@/assets/svg/calendar.svg";
+import { useRouter } from "vue-router";
 type BalanceType = "expend" | "income";
 interface Result {
   createdAt: number;
@@ -86,6 +87,7 @@ interface Result {
   id?: number;
 }
 export default defineComponent({
+  name: "moneyPannel",
   components: { DatePicker },
   props: {
     show: {
@@ -175,6 +177,7 @@ export default defineComponent({
       }
       return flag;
     };
+    const router = useRouter();
     const onClose = () => {
       const closePannelAndclearParams = () => {
         handleShow.value = false;
@@ -189,6 +192,7 @@ export default defineComponent({
           Object.assign(result, emptyResult);
         }, 500);
         reload();
+        router.push({ name: "billList" });
       };
       if (props.params) {
         if (onCloseValidator()) {

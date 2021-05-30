@@ -10,7 +10,7 @@ yarn build
 cd dist
 
 # 如果你要部署到自定义域名
-echo 'iaccounts.jarrett.fun' > CNAME
+# echo 'iaccounts.jarrett.fun' > CNAME
 
 git init
 git add -A

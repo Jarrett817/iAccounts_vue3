@@ -63,12 +63,11 @@ import { useRouter } from "vue-router";
 import { defineComponent, reactive, ref } from "vue";
 import { billService, tagService } from "@/services";
 import { ListItem } from "../common/types";
-import MoneyPannel from "@/components/money-pannel.vue";
 import IconList from "../components/icon-list.vue";
 import { Dialog } from "vant";
 import dayjs from "dayjs";
 export default defineComponent({
-  components: { MoneyPannel, IconList },
+  components: { IconList },
   props: {
     from: {
       type: String,

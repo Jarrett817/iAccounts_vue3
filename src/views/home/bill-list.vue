@@ -23,7 +23,12 @@
     </ul>
   </div>
   <template v-else>
-    <van-empty class="custom-image" :image="noBills" description="一笔流水都没有，快去记一笔把" />
+    <van-empty class="custom-image" :image="noBills">
+      <template v-slot:description>
+        一个标签都没有，赶快<i-button @click="handleClick">添加</i-button>一个吧~
+      </template>
+      <money-pannel v-model:show="moneyPannelVisible"></money-pannel>
+    </van-empty>
   </template>
 </template>
 
@@ -43,7 +48,7 @@ export default defineComponent({
     }
   },
   components: {},
-  setup(props) {
+  setup(props, ctx) {
     let groups: GroupData = {};
     let result = ref<ListItem[][]>([]);
     watchEffect(() => {
@@ -88,7 +93,11 @@ export default defineComponent({
       if (type === "expend") return true;
       else return false;
     };
-    return { noBills, result, groupTime, dailyBalance, isExpend };
+    const moneyPannelVisible = ref(false);
+    const handleClick = () => {
+      moneyPannelVisible.value = true;
+    };
+    return { noBills, result, groupTime, dailyBalance, isExpend, handleClick, moneyPannelVisible };
   }
 });
 </script>

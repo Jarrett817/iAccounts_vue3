@@ -21,7 +21,7 @@ export default defineConfig({
     strictPort: true,
     proxy: {
       "^/iAccounts": {
-        target: "http://121.41.54.54:7001",
+        target: "http://127.0.0.1:7001",
         changeOrigin: true
       }
     }
