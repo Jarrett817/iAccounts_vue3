@@ -16,7 +16,7 @@
     <balance-tab v-model:active="ringActiveIndex"></balance-tab>
     <chart :source="ringSource" chartType="ring"> </chart>
   </div>
-  <div class="leader-board">
+  <div class="leader-board" v-if="top10?.length">
     <h2>
       <span>当月支出排行</span><van-icon name="medal-o" color="#fad20c" size="24px"></van-icon>
     </h2>
