@@ -24,7 +24,9 @@ import {
   Picker,
   Form,
   List,
-  PullRefresh
+  PullRefresh,
+  Step,
+  Steps
 } from "vant";
 import { App } from "vue";
 const componentArray = [
@@ -53,7 +55,9 @@ const componentArray = [
   Picker,
   Form,
   List,
-  PullRefresh
+  PullRefresh,
+  Step,
+  Steps
 ];
 export const vantPlugin = {
   install: (app: App) => {

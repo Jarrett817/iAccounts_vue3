@@ -1,5 +1,11 @@
 <template>
-  <van-popup v-model:show="handleShow" position="bottom" get-container="body">
+  <van-popup v-model:show="handleShow" position="bottom" get-container="body" round>
+    <van-steps :active="active" active-color="#38f" active-icon="success" inactive-icon="arrow">
+      <van-step>设置分类</van-step>
+      <van-step>选择标签</van-step>
+      <van-step>填写金额</van-step>
+      <van-step>点击完成</van-step>
+    </van-steps>
     <balance-tab v-model:active="activeIndex"></balance-tab>
     <div class="icon-list" v-if="iconList?.length">
       <div @click="onIconClick" v-for="item in iconList" :key="item.name">
@@ -32,7 +38,7 @@
         <van-field
           v-model="result.desc"
           left-icon="winning"
-          placeholder="点击写备注"
+          placeholder="点击写备注（选填）"
           maxlength="60"
         />
       </div>
@@ -78,7 +84,7 @@ import { billService, tagService } from "@/services/";
 import dayjs, { Dayjs } from "dayjs";
 import { Notify } from "vant";
 import calendar from "@/assets/svg/calendar.svg";
-import { useRouter } from "vue-router";
+import { useRouter, useRoute } from "vue-router";
 type BalanceType = "expend" | "income";
 interface Result {
   createdAt: number;
@@ -115,6 +121,7 @@ export default defineComponent({
     const iconList = ref<{ id: number; icon: string; name: string; selected?: boolean }[]>([]);
     const reload: Function = inject("reload") as Function;
     const datePickerShow = ref(false);
+    const active = ref(0);
     const curDate = props.params
       ? props.params.createdAt
         ? dayjs(props.params.createdAt)
@@ -180,6 +187,7 @@ export default defineComponent({
       return flag;
     };
     const router = useRouter();
+    const route = useRoute();
     const onClose = () => {
       const closePannelAndclearParams = () => {
         handleShow.value = false;
@@ -194,7 +202,8 @@ export default defineComponent({
           Object.assign(result, emptyResult);
         }, 500);
         reload();
-        router.push({ name: "billList" });
+        if (result.tagId && Number(result.value)) active.value = 3;
+        if (route.name !== "billList") router.push({ name: "billList" });
       };
       if (props.params) {
         if (onCloseValidator()) {
@@ -209,8 +218,8 @@ export default defineComponent({
             })
             .then(res => {
               Notify({ type: "success", message: "修改成功" });
+              closePannelAndclearParams();
             });
-          closePannelAndclearParams();
         }
       } else {
         if (onCloseValidator()) {
@@ -218,9 +227,8 @@ export default defineComponent({
             .addBill({ ...result, value: Number(Number(result.value).toFixed(2)) })
             .then(res => {
               Notify({ type: "success", message: "新增成功" });
+              closePannelAndclearParams();
             });
-
-          closePannelAndclearParams();
         }
       }
     };
@@ -244,7 +252,10 @@ export default defineComponent({
         }
       });
     };
-
+    watchEffect(() => {
+      if (result.tagId) active.value = 1;
+      if (result.tagId && Number(result.value)) active.value = 2;
+    });
     return {
       iconList,
       onClose,
@@ -258,7 +269,8 @@ export default defineComponent({
       onIconClick,
       activeIndex,
       timeValue,
-      calendar
+      calendar,
+      active
     };
   }
 });
@@ -303,6 +315,7 @@ export default defineComponent({
   white-space: nowrap;
   padding: 0 16px;
   margin: 6px 0;
+  box-shadow: inset -1px 0px 3px 0px rgba(0, 0, 0, 0.26);
   .icon-name-wrap {
     display: flex;
     flex-direction: column;
@@ -416,5 +429,8 @@ section {
 .fade-leave-to {
   position: absolute;
   opacity: 0;
+}
+.van-steps {
+  padding: 18px 12px 0 12px;
 }
 </style>

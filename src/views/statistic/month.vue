@@ -16,6 +16,7 @@
     <balance-tab v-model:active="ringActiveIndex"></balance-tab>
     <chart :source="ringSource" chartType="ring"> </chart>
   </div>
+  <div>当月支出TOP10</div>
 </template>
 
 <script lang="ts">
