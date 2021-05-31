@@ -15,10 +15,15 @@ export const barFn = (chart: F2.Chart, data: DataItem[]) => {
         }
       }
     });
-    chart.tooltip({
-      showTitle: true // 展示  tooltip 的标题
-    });
   }
+  chart.tooltip({
+    showTitle: true, // 展示  tooltip 的标题
+    background: {
+      radius: 2,
+      fill: "rgba(0, 0, 0,0.3)",
+      padding: [6, 10]
+    }
+  });
   chart.source(data);
   chart.legend({
     position: "bottom",

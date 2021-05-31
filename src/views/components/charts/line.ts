@@ -10,6 +10,14 @@ export const lineFn = (chart: F2.Chart, data: DataItem[]) => {
     position: "bottom",
     offsetY: -5
   });
+  chart.tooltip({
+    showTitle: true, // 展示  tooltip 的标题
+    background: {
+      radius: 2,
+      fill: "rgba(0, 0, 0,0.3)",
+      padding: [6, 10]
+    }
+  });
   chart
     .line()
     .position("xAxisVal*yAxisVal")

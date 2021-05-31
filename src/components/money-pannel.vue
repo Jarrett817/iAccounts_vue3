@@ -4,7 +4,9 @@
     <div class="icon-list" v-if="iconList?.length">
       <div @click="onIconClick" v-for="item in iconList" :key="item.name">
         <div class="icon-name-wrap" :key="item.name">
-          <svg-icon :class="['tag-icon', item.selected ? 'selected' : '']" :name="item.icon" />
+          <div class="svg-wrapper" :class="['tag-icon', item.selected ? 'selected' : '']">
+            <svg-icon :name="item.icon" />
+          </div>
           <span>{{ item.name }}</span>
         </div>
       </div>
@@ -273,6 +275,23 @@ export default defineComponent({
   font-size: 16px;
   margin: 6px 0;
 }
+@keyframes myRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  33% {
+    transform: rotate(120deg);
+  }
+
+  66% {
+    transform: rotate(240deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
 .icon-list {
   display: flex;
   flex-direction: row;
@@ -295,7 +314,30 @@ export default defineComponent({
     font-size: 24px;
     margin-bottom: 4px;
     &.selected {
-      transform: scale(1.5);
+      position: relative;
+
+      &::before {
+        display: block;
+        content: "";
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgb(255, 255, 255);
+        background: linear-gradient(
+          90deg,
+          rgba(254, 255, 227, 0.8186624991793592) 0%,
+          rgba(244, 255, 54, 50) 50%,
+          rgba(246, 235, 16, 1) 100%
+        );
+        position: absolute;
+        left: -4px;
+        top: -3px;
+        z-index: -1;
+        animation: myRotate 500ms infinite linear;
+        box-shadow: 0 0 1px rgba(244, 255, 54, 50), 0 0 3px rgba(244, 255, 54, 50),
+          0 0 5px rgba(244, 255, 54, 50);
+        color: black;
+      }
     }
   }
   span {
