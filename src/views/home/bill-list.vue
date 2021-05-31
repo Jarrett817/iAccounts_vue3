@@ -37,6 +37,7 @@ import { defineComponent, PropType, ref, watchEffect } from "vue";
 import dayjs from "dayjs";
 import { ListItem } from "../common/types";
 import noBills from "@/assets/emptyStatus/noBills.png";
+import { cloneDeep } from "lodash";
 interface GroupData {
   [key: string]: ListItem[];
 }
@@ -55,7 +56,7 @@ export default defineComponent({
       groups = {};
       result.value = [];
       if (props.listData?.length) {
-        const _listData = props.listData;
+        const _listData = cloneDeep(props.listData);
         _listData.sort((pre: ListItem, next: ListItem) => {
           if (pre.createdAt! > next.createdAt!) return -1;
           else if (pre.createdAt! < next.createdAt!) return 1;
@@ -66,9 +67,17 @@ export default defineComponent({
           const date = dayjs(dataItem.createdAt!).format("YYYYMMDD");
           groups[date] ? groups[date].push(dataItem) : (groups[date] = [dataItem]);
         });
-        result.value = Object.keys(groups).map((key: string) => {
-          return groups[key];
-        });
+        result.value = Object.keys(groups)
+          .sort((pre: string, next: string) => {
+            const _pre = Number(pre);
+            const _next = Number(next);
+            if (_pre > _next) return -1;
+            else if (_pre < _next) return 1;
+            else return 0;
+          })
+          .map((key: string) => {
+            return groups[key];
+          });
       }
     });
     const weekDay = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
