@@ -21,18 +21,22 @@ const store = createStore<GlobalData>({
   },
   actions: {
     loginAsync: ({ commit }, data) => {
-      return loginService.login({ id: data.id, password: data.password }).then(res => {
-        // 服务端返回一个jwt token
-        if (res && res.token) {
-          commit("login", res.token);
-        }
-      });
+      return loginService
+        .login({ id: data.id.trim(), password: data.password.trim() })
+        .then(res => {
+          // 服务端返回一个jwt token
+          if (res && res.token) {
+            commit("login", res.token);
+          }
+        });
     },
     registerAsync: ({ commit }, data) => {
-      return loginService.register({ id: data.id, password: data.password }).then(res => {
-        Notify({ type: "success", message: "注册成功" });
-        router.push({ name: "login" });
-      });
+      return loginService
+        .register({ id: data.id.trim(), password: data.password.trim() })
+        .then(res => {
+          Notify({ type: "success", message: "注册成功" });
+          router.push({ name: "login" });
+        });
     }
   }
 });

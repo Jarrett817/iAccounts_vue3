@@ -26,7 +26,8 @@ import {
   List,
   PullRefresh,
   Step,
-  Steps
+  Steps,
+  Progress
 } from "vant";
 import { App } from "vue";
 const componentArray = [
@@ -57,7 +58,8 @@ const componentArray = [
   List,
   PullRefresh,
   Step,
-  Steps
+  Steps,
+  Progress
 ];
 export const vantPlugin = {
   install: (app: App) => {

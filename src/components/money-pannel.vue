@@ -315,7 +315,6 @@ export default defineComponent({
   white-space: nowrap;
   padding: 0 16px;
   margin: 6px 0;
-  box-shadow: inset -1px 0px 3px 0px rgba(0, 0, 0, 0.26);
   .icon-name-wrap {
     display: flex;
     flex-direction: column;
@@ -431,6 +430,7 @@ section {
   opacity: 0;
 }
 .van-steps {
-  padding: 18px 12px 0 12px;
+  padding: 18px 12px 12px 12px;
+  border-bottom: 1px solid #ebedf0;
 }
 </style>
