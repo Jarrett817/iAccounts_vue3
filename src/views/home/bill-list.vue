@@ -25,7 +25,7 @@
   <template v-else>
     <van-empty class="custom-image" :image="noBills">
       <template v-slot:description>
-        一个标签都没有，赶快<i-button @click="handleClick">添加</i-button>一个吧~
+        一笔流水都没有，赶快<i-button @click="handleClick">记一笔</i-button>吧~
       </template>
       <money-pannel v-model:show="moneyPannelVisible"></money-pannel>
     </van-empty>
