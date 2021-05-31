@@ -1,10 +1,18 @@
 <template>
-  <van-popup v-model:show="handleShow" position="bottom" get-container="body">
+  <van-popup v-model:show="handleShow" position="bottom" get-container="body" round>
+    <van-steps :active="active" active-color="#38f" active-icon="success" inactive-icon="arrow">
+      <van-step>设置分类</van-step>
+      <van-step>选择标签</van-step>
+      <van-step>填写金额</van-step>
+      <van-step>点击完成</van-step>
+    </van-steps>
     <balance-tab v-model:active="activeIndex"></balance-tab>
     <div class="icon-list" v-if="iconList?.length">
       <div @click="onIconClick" v-for="item in iconList" :key="item.name">
         <div class="icon-name-wrap" :key="item.name">
-          <svg-icon :class="['tag-icon', item.selected ? 'selected' : '']" :name="item.icon" />
+          <div class="svg-wrapper" :class="['tag-icon', item.selected ? 'selected' : '']">
+            <svg-icon :name="item.icon" />
+          </div>
           <span>{{ item.name }}</span>
         </div>
       </div>
@@ -30,12 +38,12 @@
         <van-field
           v-model="result.desc"
           left-icon="winning"
-          placeholder="点击写备注"
+          placeholder="点击写备注（选填）"
           maxlength="60"
         />
       </div>
       <div class="date-value-wrap">
-        <van-button size="large" icon="src/assets/svg/calendar.svg" @click="handleClick">
+        <van-button size="large" :icon="calendar" @click="handleClick">
           {{ buttonText }}
         </van-button>
         <div class="keyboard-value">{{ result.value || 0 }}</div>
@@ -75,6 +83,8 @@ import DatePicker from "@/components/date-picker.vue";
 import { billService, tagService } from "@/services/";
 import dayjs, { Dayjs } from "dayjs";
 import { Notify } from "vant";
+import calendar from "@/assets/svg/calendar.svg";
+import { useRouter, useRoute } from "vue-router";
 type BalanceType = "expend" | "income";
 interface Result {
   createdAt: number;
@@ -85,6 +95,7 @@ interface Result {
   id?: number;
 }
 export default defineComponent({
+  name: "moneyPannel",
   components: { DatePicker },
   props: {
     show: {
@@ -110,6 +121,7 @@ export default defineComponent({
     const iconList = ref<{ id: number; icon: string; name: string; selected?: boolean }[]>([]);
     const reload: Function = inject("reload") as Function;
     const datePickerShow = ref(false);
+    const active = ref(0);
     const curDate = props.params
       ? props.params.createdAt
         ? dayjs(props.params.createdAt)
@@ -174,6 +186,8 @@ export default defineComponent({
       }
       return flag;
     };
+    const router = useRouter();
+    const route = useRoute();
     const onClose = () => {
       const closePannelAndclearParams = () => {
         handleShow.value = false;
@@ -188,6 +202,8 @@ export default defineComponent({
           Object.assign(result, emptyResult);
         }, 500);
         reload();
+        if (result.tagId && Number(result.value)) active.value = 3;
+        if (route.name !== "billList") router.push({ name: "billList" });
       };
       if (props.params) {
         if (onCloseValidator()) {
@@ -202,8 +218,8 @@ export default defineComponent({
             })
             .then(res => {
               Notify({ type: "success", message: "修改成功" });
+              closePannelAndclearParams();
             });
-          closePannelAndclearParams();
         }
       } else {
         if (onCloseValidator()) {
@@ -211,9 +227,8 @@ export default defineComponent({
             .addBill({ ...result, value: Number(Number(result.value).toFixed(2)) })
             .then(res => {
               Notify({ type: "success", message: "新增成功" });
+              closePannelAndclearParams();
             });
-
-          closePannelAndclearParams();
         }
       }
     };
@@ -237,7 +252,10 @@ export default defineComponent({
         }
       });
     };
-
+    watchEffect(() => {
+      if (result.tagId) active.value = 1;
+      if (result.tagId && Number(result.value)) active.value = 2;
+    });
     return {
       iconList,
       onClose,
@@ -250,7 +268,9 @@ export default defineComponent({
       handleShow,
       onIconClick,
       activeIndex,
-      timeValue
+      timeValue,
+      calendar,
+      active
     };
   }
 });
@@ -266,6 +286,23 @@ export default defineComponent({
 .no-tag {
   font-size: 16px;
   margin: 6px 0;
+}
+@keyframes myRotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  33% {
+    transform: rotate(120deg);
+  }
+
+  66% {
+    transform: rotate(240deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }
 .icon-list {
   display: flex;
@@ -289,7 +326,30 @@ export default defineComponent({
     font-size: 24px;
     margin-bottom: 4px;
     &.selected {
-      transform: scale(1.5);
+      position: relative;
+
+      &::before {
+        display: block;
+        content: "";
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        background: rgb(255, 255, 255);
+        background: linear-gradient(
+          90deg,
+          rgba(254, 255, 227, 0.8186624991793592) 0%,
+          rgba(244, 255, 54, 50) 50%,
+          rgba(246, 235, 16, 1) 100%
+        );
+        position: absolute;
+        left: -4px;
+        top: -3px;
+        z-index: -1;
+        animation: myRotate 500ms infinite linear;
+        box-shadow: 0 0 1px rgba(244, 255, 54, 50), 0 0 3px rgba(244, 255, 54, 50),
+          0 0 5px rgba(244, 255, 54, 50);
+        color: black;
+      }
     }
   }
   span {
@@ -368,5 +428,9 @@ section {
 .fade-leave-to {
   position: absolute;
   opacity: 0;
+}
+.van-steps {
+  padding: 18px 12px 12px 12px;
+  border-bottom: 1px solid #ebedf0;
 }
 </style>

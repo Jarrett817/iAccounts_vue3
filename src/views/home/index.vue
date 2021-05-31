@@ -23,7 +23,9 @@
             <van-dropdown-item v-model="curType" :options="listTypeOptions"> </van-dropdown-item>
           </van-dropdown-menu>
         </van-sticky>
-        <div class="list-wrap"><bill-list :listData="detailList"></bill-list></div>
+        <div class="list-wrap">
+          <bill-list :listData="detailList"></bill-list>
+        </div>
       </div>
     </template>
     <template v-slot:footer> <i-tabbar></i-tabbar> </template>
@@ -95,6 +97,7 @@ export default defineComponent({
     watch(curType, val => {
       getStatistic(timeValue.value, val);
     });
+
     return {
       monthlyExpend,
       monthlyIncome,

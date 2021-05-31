@@ -63,12 +63,11 @@ import { useRouter } from "vue-router";
 import { defineComponent, reactive, ref } from "vue";
 import { billService, tagService } from "@/services";
 import { ListItem } from "../common/types";
-import MoneyPannel from "@/components/money-pannel.vue";
 import IconList from "../components/icon-list.vue";
 import { Dialog } from "vant";
 import dayjs from "dayjs";
 export default defineComponent({
-  components: { MoneyPannel, IconList },
+  components: { IconList },
   props: {
     from: {
       type: String,
@@ -141,19 +140,26 @@ export default defineComponent({
     const editClick = () => {
       if (props.from === "tags") {
         if (props.mode === "add") {
-          tagService.addTag({
-            name: tagMap.name,
-            icon: tagMap.icon,
-            type: props.type as "income" | "expend"
-          });
+          tagService
+            .addTag({
+              name: tagMap.name,
+              icon: tagMap.icon,
+              type: props.type as "income" | "expend"
+            })
+            .then(() => {
+              router.push({ name: props.from });
+            });
         } else {
-          tagService.updateTargetTag({
-            id: Number(props.id),
-            name: tagMap.name,
-            icon: tagMap.icon
-          });
+          tagService
+            .updateTargetTag({
+              id: Number(props.id),
+              name: tagMap.name,
+              icon: tagMap.icon
+            })
+            .then(() => {
+              router.push({ name: props.from });
+            });
         }
-        router.push({ name: props.from });
       } else {
         moneyPannelVisible.value = true;
       }

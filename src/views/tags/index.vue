@@ -37,12 +37,7 @@
           <span>添加</span>
         </router-link>
       </section>
-      <van-empty
-        v-else
-        class="custom-image"
-        image="src/assets/emptyStatus/noTags.png"
-        description=""
-      >
+      <van-empty v-else class="custom-image" :image="noTags" description="">
         <template v-slot:description>
           <div class="click-me">
             一个标签都没有，赶快<router-link
@@ -70,7 +65,7 @@
 <script lang="ts">
 import { tagService } from "@/services";
 import { defineComponent, ref, watchEffect } from "vue";
-
+import noTags from "@/assets/emptyStatus/noTags.png";
 interface Icon {
   name: string;
   id: number;
@@ -88,7 +83,8 @@ export default defineComponent({
     });
     return {
       activeIndex,
-      iconList
+      iconList,
+      noTags
     };
   }
 });
@@ -119,6 +115,7 @@ section {
     }
     span {
       font-size: 12px;
+      white-space: nowrap;
     }
   }
 }

@@ -15,13 +15,13 @@ const vantConfig = {
 
 export default defineConfig({
   plugins: [vue(), styleImport({ libs: [vantConfig] }), svgBuilder("src/assets/svg/")],
-  base: process.env.NODE_ENV === "production" ? "/iAccounts/" : "/",
+  base: "/",
   server: {
     port: 3000,
     strictPort: true,
     proxy: {
       "^/iAccounts": {
-        target: "http://121.41.54.54:7001",
+        target: "http://127.0.0.1:7001",
         changeOrigin: true
       }
     }

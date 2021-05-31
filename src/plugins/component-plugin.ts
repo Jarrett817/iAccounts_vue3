@@ -1,3 +1,4 @@
+import { componentPlugin } from "./component-plugin";
 import * as components from "@/components";
 import { App } from "vue";
 
