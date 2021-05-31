@@ -25,6 +25,7 @@ interface AddParams {
   value: number;
   type: string;
   desc: string;
+  tagName: string;
 }
 interface ResponseMsg {
   status: number;
@@ -82,7 +83,7 @@ class BillService extends Xhr {
     type: string;
     value: number;
     desc: string;
-    tagId: number;
+    tagName: string;
     createdAt: number;
   }) {
     return this.http<ResponseMsg>({

@@ -50,10 +50,7 @@
         }}</van-button>
         <van-button v-if="mode !== 'add'" type="default" @click="deleteClick">删除</van-button>
       </div>
-      <money-pannel
-        v-model:show="moneyPannelVisible"
-        :params="{ ...billsMap, tagId: billsMap.tag.id }"
-      ></money-pannel>
+      <money-pannel v-model:show="moneyPannelVisible" :params="{ ...billsMap }"></money-pannel>
     </template>
   </i-layout>
 </template>
@@ -104,7 +101,6 @@ export default defineComponent({
       value: 0,
       desc: "",
       tag: {
-        id: null,
         name: "",
         icon: ""
       },
@@ -169,9 +165,14 @@ export default defineComponent({
         message: "确认删除？"
       })
         .then(() => {
-          if (props.from === "tags") tagService.deleteTargetTag({ id: Number(props.id) });
-          else billService.deleteTargetBill({ id: Number(props.id) });
-          router.push({ name: props.from });
+          if (props.from === "tags")
+            tagService.deleteTargetTag({ id: Number(props.id) }).then(res => {
+              router.push({ name: props.from });
+            });
+          else
+            billService.deleteTargetBill({ id: Number(props.id) }).then(res => {
+              router.push({ name: props.from });
+            });
         })
         .catch(() => {});
     };

@@ -91,8 +91,11 @@ interface Result {
   value: string;
   type: BalanceType;
   desc: string;
-  tagId: number | null;
   id?: number;
+  tag: {
+    name: string;
+    icon: string;
+  };
 }
 export default defineComponent({
   name: "moneyPannel",
@@ -116,7 +119,10 @@ export default defineComponent({
       value: "",
       type: "expend",
       desc: "",
-      tagId: null
+      tag: {
+        name: "",
+        icon: ""
+      }
     });
     const iconList = ref<{ id: number; icon: string; name: string; selected?: boolean }[]>([]);
     const reload: Function = inject("reload") as Function;
@@ -144,7 +150,7 @@ export default defineComponent({
         iconList.value = res;
         if (res?.length) {
           iconList.value.forEach(item => {
-            if ((result.tagId || result.tagId === 0) && item.id === result.tagId) {
+            if (result.tag.name && item.name === result.tag.name) {
               item.selected = true;
             }
           });
@@ -177,7 +183,7 @@ export default defineComponent({
     };
     const onCloseValidator = () => {
       let flag = true;
-      if (!(result.tagId || result.tagId === 0)) {
+      if (!result.tag.name) {
         Notify({ type: "warning", message: "至少需要选择一个记账标签" });
         flag = false;
       } else if (Number(result.value) === 0) {
@@ -202,7 +208,7 @@ export default defineComponent({
           Object.assign(result, emptyResult);
         }, 500);
         reload();
-        if (result.tagId && Number(result.value)) active.value = 3;
+        if (result.tag.name && Number(result.value)) active.value = 3;
         if (route.name !== "billList") router.push({ name: "billList" });
       };
       if (props.params) {
@@ -213,7 +219,7 @@ export default defineComponent({
               type: result.type,
               value: Number(result.value),
               id: result.id as number,
-              tagId: result.tagId as number,
+              tagName: result.tag.name,
               createdAt: result.createdAt
             })
             .then(res => {
@@ -224,7 +230,13 @@ export default defineComponent({
       } else {
         if (onCloseValidator()) {
           billService
-            .addBill({ ...result, value: Number(Number(result.value).toFixed(2)) })
+            .addBill({
+              createdAt: result.createdAt,
+              type: result.type,
+              desc: result.desc,
+              tagName: result.tag.name,
+              value: Number(Number(result.value).toFixed(2))
+            })
             .then(res => {
               Notify({ type: "success", message: "新增成功" });
               closePannelAndclearParams();
@@ -248,13 +260,13 @@ export default defineComponent({
           else item.selected = false;
         }
         if (item.selected) {
-          result.tagId = item.id;
+          result.tag.name = item.name;
         }
       });
     };
     watchEffect(() => {
-      if (result.tagId) active.value = 1;
-      if (result.tagId && Number(result.value)) active.value = 2;
+      if (result.tag.name) active.value = 1;
+      if (result.tag.name && Number(result.value)) active.value = 2;
     });
     return {
       iconList,
