@@ -63,21 +63,31 @@ export default defineComponent({
         }
       });
       const result: { name: "支出" | "收入"; xAxisVal: string; yAxisVal: number }[] = [];
+      const monthEn = [
+        "Jan.",
+        "Feb.",
+        "Mar.",
+        "Apr.",
+        "May.",
+        "Jun.",
+        "Jul.",
+        "Aug.",
+        "Sept.",
+        "Oct.",
+        "Nov.",
+        "Dec."
+      ];
       _data.forEach((item: ListItem) => {
         if (type === "bar") {
           [
             {
               name: "支出" as "支出" | "收入",
-              xAxisVal: dayjs()
-                .month(item.month - 1)
-                .format("MM月"),
+              xAxisVal: monthEn[Number(item.month) - 1],
               yAxisVal: item.expend
             },
             {
               name: "收入" as "支出" | "收入",
-              xAxisVal: dayjs()
-                .month(item.month - 1)
-                .format("MM月"),
+              xAxisVal: monthEn[Number(item.month) - 1],
               yAxisVal: item.income
             }
           ].forEach(item => {
@@ -86,16 +96,12 @@ export default defineComponent({
         } else {
           [
             {
-              xAxisVal: dayjs()
-                .month(item.month - 1)
-                .format("MM月"),
+              xAxisVal: monthEn[Number(item.month) - 1],
               yAxisVal: item.expend,
               name: "支出" as "支出" | "收入"
             },
             {
-              xAxisVal: dayjs()
-                .month(item.month - 1)
-                .format("MM月"),
+              xAxisVal: monthEn[Number(item.month) - 1],
               yAxisVal: item.income,
               name: "收入" as "支出" | "收入"
             }

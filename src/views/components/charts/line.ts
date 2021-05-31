@@ -23,5 +23,6 @@ export const lineFn = (chart: F2.Chart, data: DataItem[]) => {
     .position("xAxisVal*yAxisVal")
     .color("name", ["#4ca2f8", "#e67e81"])
     .shape("name", "line");
+  chart.area().position("xAxisVal*yAxisVal").color("name", ["#4ca2f8", "#e67e81"]);
   chart.source(data);
 };
