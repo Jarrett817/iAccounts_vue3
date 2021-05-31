@@ -115,6 +115,7 @@ section {
     }
     span {
       font-size: 12px;
+      white-space: nowrap;
     }
   }
 }
