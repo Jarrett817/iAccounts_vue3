@@ -10,7 +10,7 @@ export class Xhr {
   baseURL = "";
   modelPath = "";
   constructor() {
-    this.baseURL = "http://124.221.212.56:7001/iAccounts/api/v1";
+    this.baseURL = "https://124.221.212.56:7001/iAccounts/api/v1";
     this.modelPath = ""; // 后端 API 根路径
   }
   http<T>(options: Options, config?: any) {
